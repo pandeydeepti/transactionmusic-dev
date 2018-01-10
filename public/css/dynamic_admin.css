@@ -1,0 +1,60 @@
+.login button{
+    color: #7c19fb;
+}
+.sidebar ul li.active {
+    background-color: #7c19fb;
+}
+.sidebar ul li:hover {
+    background-color: #7c19fb;
+}
+.title-page {
+    color: #7c19fb;
+}
+.main-color {
+    color: #7c19fb;
+}
+.add-new-beat:hover, .add-new-category:hover,  .add-new-page:hover, .add-new-subintance:hover, button.add-new-faq-btn:hover, button.add-new-producer-btn:hover{
+    background-color: #7c19fb;
+}
+#myTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover, #categoryTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover, #pageTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover,  #subintanceTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+    background: #7c19fb;
+    border: 1px solid #7c19fb;
+}
+.add-category-main-wrapper button:hover {
+    background-color: #7c19fb;
+}
+.toggle-checkbox input:checked + .slider{
+    background-color: #7c19fb;
+}
+.btn-save button, #save-embed {
+    background-color: #7c19fb;
+}
+div.ajax-file-upload:hover {
+    background: #7c19fb;
+}
+.add-category-main-wrapper input[type = checkbox]:checked {
+    background: #7c19fb;
+}
+.beat-single-title, .category-single-title, table.dataTable tbody tr td .subintance-single-title a {
+    color: #7c19fb !important;
+}
+div.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
+    border: 1px solid #7c19fb;
+    color: #7c19fb !important;
+}
+div.ajax-file-upload-filename {
+    background: #7c19fb;
+}
+div.dataTables_wrapper .dataTables_paginate .paginate_button.next, div.dataTables_wrapper .dataTables_paginate .paginate_button.previous {
+    border: 1px solid #7c19fb;
+    color: #7c19fb !important;
+}
+.beats-index .loader-wrapper, .category-index-main-wrapper .loader-wrapper {
+    color: #7c19fb;
+}
+.toggle-category-checkbox input:checked + .slider, .toggle-beat-checkbox input:checked + .slider, .toggle-exclusive-checkbox input:checked + .slider, .toggle-instance-state input:checked + .slider, .toggle-page-checkbox input:checked + .slider, .toggle-edit-page-checkbox input:checked + .slider{
+    background-color: #7c19fb;
+}
+table.dataTable.hover tbody tr:hover, table#subintanceTable.dataTable.hover tbody tr:hover .edit-link-hover{
+    color: #7c19fb;
+}

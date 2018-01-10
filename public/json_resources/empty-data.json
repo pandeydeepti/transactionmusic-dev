@@ -1,0 +1,34 @@
+{
+  "beats": [],
+  "filters": {
+    "genre": [
+      {
+        "title": "",
+        "id": "",
+        "cover": ""
+      }
+
+    ],
+    "instruments": [
+      {
+        "title": "",
+        "id": "",
+        "cover": ""
+      }
+    ],
+    "producer": [
+      {
+        "title": "",
+        "id": "",
+        "cover": ""
+      }
+    ],
+    "sounds like": [
+      {
+        "title": "",
+        "id": "",
+        "cover": ""
+      }
+    ]
+  }
+}
