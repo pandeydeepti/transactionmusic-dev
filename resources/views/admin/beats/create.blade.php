@@ -283,7 +283,7 @@
                                    <div class="col-sm-6 nopadding-new">
                                         <div class="add-category-main-wrapper box-shadow-default clearfix sound-like">
                                             <label for="producers" class="producers-title-label">PRODUCERS</label>
-<div class="row"><div class="col-sm-6 nopadding-new">
+<div class="row"><div class="col-sm-6">
                                                <div class="genre-category-inner-wrapper add-category-inner-wrapper">
                                                    <select name="producers[]" class="col-sm-6 category-single-item">
                                             @if(isset($producers))
