@@ -54,7 +54,7 @@
                                                                        value="@if(!empty($beat->title)){{$beat->title}} @endif">
                                                             </div>
                                                             <div class="col-sm-6">
-                                                                <label for="rate">AVG RATING</label>
+                                                                <label for="rate">RATING</label>
                                                                 <input
                                                                         class="fullwidth"
                                                                         type="number"
@@ -86,6 +86,8 @@
                                                             <input type="hidden" id="cover_validator"
                                                                    name="cover_validator">
                                                         </div>
+                                                        <br>
+                                                         <span>Max Width: 200px | Max Height: 200px</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,7 +196,9 @@
                                                                         </div>
                                                                     </div>
                                                                 </div> <!-- file-types-single-row 3-->
-                                                                <div class="file-types-single-row clearfix"> <!-- file-types-single-row 4-->
+
+
+                                                            <div class="file-types-single-row clearfix"> <!-- file-types-single-row 4-->
                                                                 <div class="col-sm-3">
                                                                     <div class="file-name-wrapper">
                                                                         <label for="exclusive">EXCLUSIVE</label>
@@ -202,7 +206,7 @@
                                                                 </div>
                                                                 <div class="col-sm-5">
                                                                     <div class="row">
-                                                                        <div class="toggle-checkbox">
+                                                                        <div class="toggle-exclusive-checkbox">
                                                                             <label class="switch">
                                                                                 {{Form::hidden('exclusive_active',0)}}
                                                                                 @if(!empty($beat->exclusive_active))
@@ -241,40 +245,88 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="add-category-main-wrapper box-shadow-default clearfix">
-                                        <label for="categories" class="categories-title-label">CATEGORIES</label>
-                                        @if(isset($categories))
-                                            @foreach($categories as $key => $value)
+                                    <div class="col-sm-6">
+                                        <div class="add-category-main-wrapper box-shadow-default clearfix">
+                                            <label for="categories" class="categories-title-label">CATEGORIES</label>
+                                            @if(isset($categories))
+                                                @foreach($categories as $key => $value)
 
-                                                <div class="col-sm-6 category-box">
-                                                    <label for="genre"
-                                                           class="categories-title-label">{{$key}}</label>
+                                                    <div class="col-sm-6 category-box">
+                                                        <label for="genre"
+                                                               class="categories-title-label">{{$key}}</label>
 
-                                                    <div class="genre-category-inner-wrapper add-category-inner-wrapper">
-                                                        @foreach($value as $catKey => $catValue)
-                                                            <div class="category-single-item">
-                                                                <label for="{{$catValue['id']}}">{{$catValue['category']}}</label>
-                                                                <input type="checkbox"
-                                                                       @if(!empty($beat) && in_array(  $catValue['id'], $beat->cat_id) ) {{"checked"}}  @endif class="categories"
-                                                                       name="categories[]"
-                                                                       id="{{$catValue['id']}}"
-                                                                       value="{{$catValue['id']}}"/>
-                                                            </div>
-                                                        @endforeach
+                                                        <div class="genre-category-inner-wrapper add-category-inner-wrapper">
+                                                            @foreach($value as $catKey => $catValue)
+                                                                <div class="category-single-item">
+                                                                    <label for="{{$catValue['id']}}">{{$catValue['category']}}</label>
+                                                                    <input type="checkbox"
+                                                                           @if(!empty($beat) && in_array(  $catValue['id'], $beat->cat_id) ) {{"checked"}}  @endif class="categories"
+                                                                           name="categories[]"
+                                                                           id="{{$catValue['id']}}"
+                                                                           value="{{$catValue['id']}}"/>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
-                                        <div class="col-sm-12">
-                                            <a href="/admin/categories/create" target="_blank">
-                                                <button type="button">ADD CATEGORY</button>
-                                            </a>
+                                                @endforeach
+                                            @endif
+                                            <div class="col-sm-12">
+                                                <a href="/admin/categories/create" target="_blank">
+                                                    <button type="button">ADD CATEGORY</button>
+                                                </a>
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
+                                  <div style="clear:both;padding-top:20px;"></div>
+                                   <div class="col-sm-6">
+                                        <div class="add-category-main-wrapper box-shadow-default clearfix sound-like">
+                                            <label for="producers" class="producers-title-label">PRODUCERS</label>
+<div class="row"><div class="col-sm-6">
+                                               <div class="genre-category-inner-wrapper add-category-inner-wrapper">
+                                                   <select name="producers[]" class="col-sm-6 category-single-item">
+                                            @if(isset($producers))
+                                                @foreach($producers as $key => $value)
+                                                            <option value="{{ $value->id }}" {{ @$beat->pro_id['0'] == $value->id ? 'selected="selected"' : '' }}>{{ $value->producers }}</option>
+                                                @endforeach
+                                            @endif
+                                             </select>
+                                               </div></div>
+             
+                                            <div class="col-sm-6">
+                                                <a href="/admin/producers/create" target="_blank">
+                                                    <button type="button">ADD PRODUCER</button>
+                                                </a>
+                                            </div>  </div>
+                                        </div>
+
+                                    </div>  
+                                    
+                                    <div class="col-sm-6 nopadding-new">
+                                        <div class="row add-category-main-wrapper box-shadow-default clearfix sound-like">
+                                            <label for="sound_likes" class="sound_likes-title-label">SOUNDS LIKE</label>
+                                            <div class="row">
+<div class="col-sm-6">
+                                               <div class="genre-category-inner-wrapper add-category-inner-wrapper ">
+                                                   <select name="sound_likes[]" class="col-sm-6 category-single-item">
+                                            @if(isset($sound_likes))
+                                                @foreach($sound_likes as $key => $value)
+                                                            <option value="{{ $value->id }}" {{ @$beat->snd_id['0'] == $value->id ? 'selected="selected"' : '' }}>{{ $value->sound_likes }}</option>
+                                                @endforeach
+                                            @endif
+                                             </select>
+                                               </div>
+             </div>
+                                            <div class="col-sm-6">
+                                                <a href="/admin/sounds_like/create" target="_blank">
+                                                    <button type="button">ADD SOUNDS LIKE</button>
+                                                </a>
+                                            </div></div>
+                                        </div>
+
+                                    </div>  
+                                    
                                 </div>
-                        </div>
 
                         <div class="col-sm-6">
                             <input type="hidden" name="id"
