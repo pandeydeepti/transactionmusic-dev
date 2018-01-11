@@ -2,10 +2,9 @@
 @section('content')
     {!! Form::open(['url' => 'admin/categories/update', 'id' => 'update_category', 'files' => true]) !!}
     <div class="title-page col-md-12 top-padding-title">
-        <div class="row">
             <div class="checkbox-title-togle">
                 Edit {{$category->title}}
-            </div>
+
             <div class="toggle-checkbox">
                 <label class="switch">
                     {{Form::hidden('active',0)}}
@@ -28,12 +27,12 @@
                     <div class="category-inner-wrapper">
                         <div class="col-md-5">
                             <div class="row">
-                                <label for="title">CATEGORY TITLE</label>
+                                <label for="title" class="pic-div">CATEGORY TITLE</label>
                                 <input type="text" name="title" id="category-title" placeholder="Title" required value="{{$category->title}}">
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label for="title">COVER</label>
+                            <label for="title" class="pic-div">COVER</label>
                             <div id="category-cover" @if(!empty($category->cover)) style="{{$category->cover}}"@endif>
                                 <input type="file" name="cover"
                                        id="category-upload"
