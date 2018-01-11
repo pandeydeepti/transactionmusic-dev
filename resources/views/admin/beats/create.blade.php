@@ -279,7 +279,7 @@
 
                                     </div>
                                   <div style="clear:both;padding-top:20px;"></div>
-                                   <div class="col-sm-6">
+                                   <div class="col-sm-6 nopadding-new">
                                         <div class="add-category-main-wrapper box-shadow-default clearfix sound-like">
                                             <label for="producers" class="producers-title-label">PRODUCERS</label>
 <div class="row"><div class="col-sm-6 nopadding-new">
