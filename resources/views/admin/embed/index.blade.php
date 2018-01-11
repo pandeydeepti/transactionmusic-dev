@@ -4,7 +4,7 @@
         <div class="row">Embed</div>
     </div>
 
-    <div class="col-md-8 main-div-color">
+    <div class="col-md-12 main-div-color">
         <div class="embed-main-wrapper">
             <label for="">EMBED SIZE</label>
             <hr>
@@ -40,6 +40,6 @@
 
         </div>
     </div>
-    <div class="col-md-8 no-padding"> <button id="save-embed" class="pull-right">SAVE</button></div>
+    <div class="col-md-12 no-padding"> <button id="save-embed" class="pull-right">SAVE</button></div>
 
 @endsection
