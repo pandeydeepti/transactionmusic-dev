@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <div class="title-page col-md-12">
-        <div class="row">Embed</div>
+        Embed
     </div>
 
     <div class="col-md-12 main-div-color">
