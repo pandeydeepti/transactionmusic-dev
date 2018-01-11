@@ -2,10 +2,8 @@
 @section('content')
     {!! Form::open(['url' => 'admin/categories/create', 'id'=>'add_category', 'files' => true]) !!}
     <div class="title-page col-md-12 top-padding-title">
-        <div class="row">
             <div class="checkbox-title-togle">
                 Add Category
-            </div>
             <div class="toggle-checkbox">
                 <label class="switch">
                     {{Form::hidden('active',0)}}
@@ -22,13 +20,13 @@
                     <div class="category-inner-wrapper">
                         <div class="col-md-5">
                             <div class="row">
-                                <label for="title">CATEGORY TITLE</label>
+                                <label for="title" class="pic-div">CATEGORY TITLE</label>
                                 <input type="text" name="title" placeholder="Title" id="category-title">
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <label for="title">COVER</label>
+                            <label for="title" class="pic-div">COVER</label>
                             <div id="category-cover">
                                 <input type="file" name="cover"
                                        id="category-upload"
@@ -54,7 +52,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="row">
             <div class="btn-save">
                 <button class="pull-right" id="category-save">SAVE</button>
