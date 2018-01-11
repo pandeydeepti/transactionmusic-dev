@@ -3,7 +3,7 @@
     <div class="title-page col-md-12">
         Banners
     </div>
-    <div class="col-md-8 form-main-wrapper">
+    <div class="col-md-12 form-main-wrapper">
         <div class="row">
             <form action="/admin/banners" method="post" enctype="multipart/form-data" id="save-banner">
                 @if( $banners->isEmpty() )
