@@ -1429,3 +1429,8 @@ input[name='daterange'], #date-range-wrapper h4{
 .col-sm-6 > input#bpm {
   width: 100%;
 }
+.row > input#page-order{
+text-align:left;
+width:100%
+text-indent:10px;
+}
