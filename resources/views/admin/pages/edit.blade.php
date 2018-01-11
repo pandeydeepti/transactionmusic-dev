@@ -14,7 +14,7 @@
             <span class="loader-wrapper"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="row">
             @if(isset($page->active) && $page->active==0)
                 <div id="opacity-wrapper" class="innactive-affected-row col-md-12 page-main-wrapper box-shadow-default main-div-color">
