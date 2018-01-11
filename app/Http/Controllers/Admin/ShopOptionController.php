@@ -307,7 +307,7 @@ class ShopOptionController extends Controller
 
         foreach ($shop_options as $key => $shop_option) {
             $shop->{$shop_option->meta_key} = $shop_option->meta_value;
-            if( $shop_option->meta_key == 'order_paypal_email' ){
+            if( $shop_option->meta_key == 'order_paypal_email' || $shop_option->meta_key == 'paypal_email' ){
                 $paypal_email = $shop_option->meta_value;
             }
         }
