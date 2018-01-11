@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 @section('content')
     <div class="title-page col-md-12 col-xs-12">
-        <div class="row">Add Page</div>
+        Add Page
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
         <div class="row">
             {!! Form::open(['url' => 'admin/pages', 'id'=>'add_page']) !!}
             <input type="hidden" name="type">
@@ -15,7 +15,7 @@
                                 <div><label for="page-title">PAGE TITLE</label></div>
                                 <input type="text" name="title" placeholder="Title" id="page-title">
                             </div>
-                            <div class="col-md-3 pull-right">
+                            <div class="col-md-3 pull-right pullrightdiv">
                                 <label for="page-order" class="float-right">PAGE ORDER</label>
                                 <input type="number" min="0" name="order" id="page-order" class="float-right">
                             </div>
