@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="row">
 
 
@@ -67,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="row">
             <div class="btn-save">
                 <button class="pull-right" id="category-save">SAVE</button>
