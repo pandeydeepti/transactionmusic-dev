@@ -1290,7 +1290,7 @@ div#btn-save-beat {
 
 .tabs-left > .nav-tabs {
     float: left;
-    margin-right: 19px;
+    margin-right:5px;
     border-right: 1px solid #ddd;
 }
 
@@ -1419,3 +1419,10 @@ input[name='daterange'], #date-range-wrapper h4{
   line-height: 41px;
 }
 .pic-div{width:100%;}
+.col-md-12.btn-save {
+  margin-bottom: 15px;
+}
+.dataTables_paginate.paging_simple_numbers {
+  padding-bottom: 20px;
+}
+.nopadding-new{padding:0px;}
