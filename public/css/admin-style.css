@@ -739,7 +739,7 @@ ul.dropdown-menu{
 }
 .add-category-inner-wrapper{
     padding-top: 10px;
-    height: 200px;
+    height:auto;
     overflow-x: hidden;
 }
 .category-single-item{
@@ -1051,7 +1051,7 @@ table.dataTable tbody tr td .view-page a {
     font-family: 'Montserrat-Regular', sans-serif;
     color: #1f373d;
     height: 45px;
-    width: 270px;
+    width:100%;
     font-size: 21px;
     font-weight: 700;
 }
@@ -1410,3 +1410,12 @@ input[name='daterange'], #date-range-wrapper h4{
         font-size: 18px;
     }
 }
+
+.pullrightdiv label {
+  width: 100%;
+}
+.pullrightdiv input {
+  float: left;
+  line-height: 41px;
+}
+.pic-div{width:100%;}
