@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="title-page col-md-8">
+    <div class="title-page col-md-12">
         Categories
         <a href="/admin/categories/create"> <button class="pull-right add-new-category" type="button">ADD CATEGORY</button></a>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="category-index-main-wrapper table-opacity-zero main_datatable">
             <table id="categoryTable" class="hover" cellspacing="0" width="100%">
                 <thead>
