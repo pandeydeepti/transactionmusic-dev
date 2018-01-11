@@ -627,7 +627,7 @@ ul.dropdown-menu{
     font-weight: 700;
 }
 .file-price-wrapper{
-    float: right;
+    float: none;
     display: inline-block;
     vertical-align: top;
 }
