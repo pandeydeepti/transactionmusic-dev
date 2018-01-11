@@ -2163,3 +2163,6 @@ li {
         max-width: 170px;
     }
 }/*(max-width: 350px)*/
+.player-function-wrapper .fa-fast-forward {
+  padding-top: 6px;
+}
