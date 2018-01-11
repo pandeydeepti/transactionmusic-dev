@@ -1,17 +1,15 @@
 @extends('layouts.admin')
 @section('content')
     <div class="title-page col-md-12">
-        <div class="row">
             @if( !$pages->isEmpty() )
                 Edit Producers:
             @else
                 Create Producers
             @endif
-        </div>
     </div>
     <form action="/admin/pages/producer" method="post" enctype="multipart/form-data">
         {{csrf_field()}}
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-md-12 page-main-wrapper box-shadow-default main-div-color">
                     <div class="row">
@@ -78,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="row">
                 <div class="btn-save">
                     <button class="pull-right" type="submit">SAVE</button>
