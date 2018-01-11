@@ -1411,5 +1411,6 @@ input[name='daterange'], #date-range-wrapper h4{
     }
 }
 .right-main {
-  margin-left: 25px;
+    margin-left: 25px;
+    margin-right: 20px;
 }
