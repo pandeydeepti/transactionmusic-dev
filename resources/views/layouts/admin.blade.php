@@ -18,7 +18,7 @@ if (!str_contains(Request::path(), 'admin/shop_options')){
     @include('includes.admin.sidebar')
 
     <div class="col-md-10 pull-right">
-        <div class="row yield-content">
+        <div class="yield-content">
             <div class="right-main">
                 @yield('content')
             </div>
