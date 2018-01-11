@@ -74,6 +74,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4">
+                                                    <div class="row">
                                                         <div class="cover-content-wrapper">
                                                             <label for="title">COVER</label>
 
@@ -88,7 +89,7 @@
                                                         </div>
                                                         <br>
                                                          <span>Max Width: 200px | Max Height: 200px</span>
-                                                    </div>
+                                                    </div></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12">
