@@ -676,7 +676,7 @@ ul.dropdown-menu{
 }
 .add-category-main-wrapper{
     background: white;
-    width: 90%;
+    width: 100%;
     margin: auto;
     padding: 20px 15px;
 }
@@ -1156,7 +1156,7 @@ table.dataTable tbody tr td .view-page a {
  Temporary crate/update beat - save btn
 */
 div#btn-save-beat {
-    padding-right: 50px;
+    padding-right: 14px;
 }
 /*shop options end*/
 /*stats start*/
@@ -1426,3 +1426,6 @@ input[name='daterange'], #date-range-wrapper h4{
   padding-bottom: 20px;
 }
 .nopadding-new{padding:0px;}
+.col-sm-6 > input#bpm {
+  width: 100%;
+}
