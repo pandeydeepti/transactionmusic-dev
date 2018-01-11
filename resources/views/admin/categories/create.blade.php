@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="row">
             <div class="col-md-12 category-main-wrapper box-shadow-default main-div-color">
                 <div class="row">
