@@ -19,7 +19,7 @@ if (!str_contains(Request::path(), 'admin/shop_options')){
 
     <div class="col-md-10 pull-right">
         <div class="row yield-content">
-            <div class="col-md-offset-1">
+            <div class="right-main">
                 @yield('content')
             </div>
         </div>
