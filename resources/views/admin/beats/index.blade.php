@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-<div class="title-page col-md-8">
+<div class="title-page col-md-12">
         Beats
     <a href="/admin/beats/create"> <button class="pull-right add-new-beat" type="button">ADD BEAT</button></a>
 </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="beats-index table-opacity-zero main_datatable">
             <table id="myTable" class="hover" cellspacing="0" width="100%">
                 <thead>
