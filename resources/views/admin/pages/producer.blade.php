@@ -39,7 +39,7 @@
                             @else
                                 @for($i = 0; $i < count($pages); $i++)
                                     <div class="home-producer-inner-wrapper clearfix">
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <input type="hidden" name="id[]" value="{{$pages[$i]->id}}">
                                             <input type="text" name="title[]" placeholder="Name" value="{{$pages[$i]->title}}">
                                             <div>
