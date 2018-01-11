@@ -1,13 +1,11 @@
 @extends('layouts.admin')
 @section('content')
     <div class="title-page col-md-12">
-        <div class="row">
-            Edit FAQ:
-        </div>
+                    Edit FAQ:
     </div>
     <form action="/admin/pages/faq/update" method="post">
         {{csrf_field()}}
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="row">
                 <div class="col-md-12 page-main-wrapper box-shadow-default main-div-color">
                     <div class="row">
@@ -70,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="row">
                 <div class="btn-save">
                     <button class="pull-right" id="faq-update" type="submit">SAVE</button>
