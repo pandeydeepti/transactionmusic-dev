@@ -5,7 +5,7 @@
         Shop Options
     </div>
     {!! Form::open(['url' => 'admin/shop_options/create', 'id' => 'shop_option_save', 'files' => true]) !!}
-    <div class="col-md-6">
+    <div class="col-md-9">
         <div class="shop-color-main-wrapper box-shadow-default">
 
             <div class="col-md-12 no-right-padding">
@@ -117,7 +117,7 @@
         </div>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="shop-email-content-wrapper main-div-color clearfix box-shadow-default">
             <div class="col-md-12">
                 <label for="">MAIL TEXT</label>
@@ -128,7 +128,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="shop-thank-you-content-wrapper main-div-color clearfix box-shadow-default">
             <div class="col-md-12">
                 <label for="">THANK YOU PAGE</label>
@@ -139,7 +139,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
 
         <div class="col-md-6 no-left-padding">
             <div class="shop-paypal-inner-wrapper main-div-color clearfix box-shadow-default">
@@ -179,7 +179,7 @@
 
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="col-md-6 no-left-padding">
             <div class="shop-paypal-inner-wrapper main-div-color clearfix box-shadow-default">
                 <div class="col-md-12">
@@ -222,7 +222,7 @@
 
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="col-md-6 no-left-padding">
             <div class="shop-paypal-inner-wrapper main-div-color clearfix box-shadow-default">
                 <div class="col-md-12">
@@ -257,7 +257,7 @@
 
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
         <div class="col-md-4 btn-save no-right-padding pull-right">
             <div class="relative-shop-button">
                 <button id="shop_save_btn">SAVE</button>
