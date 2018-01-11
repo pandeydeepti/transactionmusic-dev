@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 @section('content')
-    <div class="title-page col-md-8">
+    <div class="title-page col-md-12">
         Pages
         <a href="/admin/pages/create"> <button class="pull-right add-new-page" type="button">ADD PAGE</button></a>
 
     </div>
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="page-index-main-wrapper table-opacity-zero main_datatable">
             <table id="pageTable" class="hover" cellspacing="0" width="100%">
                 <thead>
