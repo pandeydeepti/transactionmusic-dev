@@ -6,10 +6,15 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'angelleye\\PayPal' => array($vendorDir . '/angelleye/paypal-php-library/src'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
-    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
+    'PayPal\\Types' => array($vendorDir . '/paypal/adaptivepayments-sdk-php/lib'),
+    'PayPal\\Service' => array($vendorDir . '/paypal/adaptivepayments-sdk-php/lib'),
+    'PayPal' => array($vendorDir . '/paypal/sdk-core-php/lib', $vendorDir . '/paypal/rest-api-sdk-php/lib'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
     'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),
+    'Gufy\\CpanelWhm\\' => array($vendorDir . '/gufy/cpanel-whm/src'),
+    'Gufy\\CpanelPhp\\' => array($vendorDir . '/gufy/cpanel-php/src'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
 );

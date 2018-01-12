@@ -28,11 +28,9 @@ return [
     // If true, share folder will be created when allow_multi_user is true.
     'allow_share_folder' => true,
 
-    // Flexibla way to customize client folders accessibility
-    // Ex: The private folder of user will be named as the user id.
-    'user_field' => function() {
-        return auth()->user()->id;
-    },
+    // The database column to identify a user. Make sure the value is unique.
+    // Ex: When set to 'id', the private folder of user will be named as the user id.
+    'user_field' => 'id',
 
     /*
     |--------------------------------------------------------------------------
@@ -90,8 +88,7 @@ return [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
-        'image/gif',
-        'image/svg+xml',
+        'image/gif'
     ],
 
     // available since v1.3.0
@@ -101,7 +98,6 @@ return [
         'image/pjpeg',
         'image/png',
         'image/gif',
-        'image/svg+xml',
         'application/pdf',
         'text/plain',
     ],
@@ -150,16 +146,4 @@ return [
         'ppt'  => 'fa-file-powerpoint-o',
         'pptx' => 'fa-file-powerpoint-o',
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | php.ini override
-    |--------------------------------------------------------------------------
-    */
-    // These values override your php.ini settings before uploading files
-    // Set these to false to ingnore and apply your php.ini settings
-    'php_ini_overrides' => [
-        'memory_limit'        => '256M'
-    ]
-
 ];

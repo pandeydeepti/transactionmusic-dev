@@ -6,9 +6,6 @@ return [
     'nav-upload'        => 'Upload',
     'nav-thumbnails'    => 'Thumbnails',
     'nav-list'          => 'List',
-    'nav-sort'          => 'Sort',
-    'nav-sort-alphabetic'=> 'Sort By Alphabets',
-    'nav-sort-time'     => 'Sort By Time',
 
     'menu-rename'       => 'Rename',
     'menu-delete'       => 'Delete',

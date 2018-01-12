@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Banner;
+use App\Page;
 use DB;
 use JavaScript;
-use App\Page;
+use App\ShopOption;
+use Symfony\Component\HttpFoundation\Request
 
 class BeatController extends Controller
 {
@@ -124,51 +126,48 @@ class BeatController extends Controller
 //
 //         '));
 //
-        $newest_beats = DB::select(DB::raw('
-            SELECT
-            DISTINCT beats.title as beat_title,
-            beats.bpm AS bpm,
+        $newest_beats = DB::select(DB::raw('SELECT
+                    DISTINCT beats.title as beat_title,
+                    beats.bpm AS bpm, producers.title AS producer,
+                    (
+                    SELECT GROUP_CONCAT(categories.title SEPARATOR ", ") FROM `beat_categories`
+                                    INNER JOIN categories on categories.id = beat_categories.category_id
+                                    INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
+                                    INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
+                                    WHERE taxonomies.id = 1 AND beat_categories.beat_id = beats.id
+                    ) AS genre,
+        
+                    beats.id as beat_id,
+                    beats.bpm as beat_bpm,
+                    beats.created_at as beat_created_at
+        
+                     FROM `beats`
+        
+                    INNER JOIN beat_categories ON  beat_categories.beat_id = beats.id
+        			INNER JOIN beat_producers ON  beat_producers.beat_id = beats.id
+        			INNER JOIN producers ON  beat_producers.producer_id = producers.id
+        			INNER JOIN beat_sound_likes ON  beats.id = beat_sound_likes.beat_id
+        			INNER JOIN sound_likes ON  beat_sound_likes.sound_like_id = sound_likes.id
+                    INNER JOIN categories ON  beat_categories.category_id = categories.id
+                    INNER JOIN category_taxonomies ON  category_taxonomies.category_id = categories.id
+                    INNER JOIN taxonomies ON  category_taxonomies.taxonomy_id = taxonomies .id
+        
+                    ORDER BY beats.created_at DESC LIMIT 6;
+                '));
 
-            (
-            SELECT GROUP_CONCAT(categories.title SEPARATOR ", ") FROM `beat_categories`
-                            INNER JOIN categories on categories.id = beat_categories.category_id
-                            INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
-                            INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
-                            WHERE taxonomies.id = 3 AND beat_categories.beat_id = beats.id
-
-            ) AS producer,
-
-            (
-            SELECT GROUP_CONCAT(categories.title SEPARATOR ", ") FROM `beat_categories`
-                            INNER JOIN categories on categories.id = beat_categories.category_id
-                            INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
-                            INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
-                            WHERE taxonomies.id = 1 AND beat_categories.beat_id = beats.id
-            ) AS genre,
-
-            beats.id as beat_id,
-            beats.bpm as beat_bpm,
-            beats.created_at as beat_created_at
-
-             FROM `beats`
-
-            INNER JOIN beat_categories ON  beat_categories.beat_id = beats.id
-            INNER JOIN categories ON  beat_categories.category_id = categories.id
-            INNER JOIN category_taxonomies ON  category_taxonomies.category_id = categories.id
-            INNER JOIN taxonomies ON  category_taxonomies.taxonomy_id = taxonomies .id
-
-            ORDER BY beats.created_at DESC LIMIT 6;
-
-        '));
-        $producers = Page::where('type', 'producer')->orderBy('order', 'ASC')->get();
+        $producer_pages = Page::where('type', 'producer')->orderBy('order', 'ASC')->get();
         $banners = Banner::where('file_path', '!=', null)->get();
+        $shop_options = ShopOption::whereIn('meta_key', ['application_text', 'shop_text'])->get();
+        foreach ($shop_options as $shop_option) {
+            ${$shop_option['meta_key']} = $shop_option['meta_value'];
+        }
         foreach ($newest_beats as $newest_beat) {
             $newest_beat->beat_created_at = $this->human_time(strtotime($newest_beat->beat_created_at));
         }
-        foreach ($producers as $producer) {
-            $json = json_decode($producer->description);
-            $producer->description = $json->description;
-            $producer->file_path = $json->file_path;
+        foreach ($producer_pages as $producer_page) {
+            $json = json_decode($producer_page->description);
+            @$producer_page->description = $json->description;
+            @$producer_page->file_path = $json->file_path;
         }
 
         if( file_exists('json_resources/data.json') )

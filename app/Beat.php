@@ -24,4 +24,13 @@ class Beat extends Model
     {
         return $this->belongsToMany('App\LfTransaction')->withTimestamps();
     }
+    public function producers()
+    {
+        return $this->belongsToMany('App\Producer', 'beat_producers')->withTimestamps();
+    }
+    
+    public function sound_likes()
+    {
+        return $this->belongsToMany('App\SoundLike', 'beat_sound_likes')->withTimestamps();
+    }
 }

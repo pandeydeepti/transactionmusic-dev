@@ -15,19 +15,14 @@ class ItemsController extends LfmController
      */
     public function getItems()
     {
-        $path = parent::getCurrentPath();
-        $sort_type = request('sort_type');
-
-        $files = parent::sortFilesAndDirectories(parent::getFilesWithInfo($path), $sort_type);
-        $directories = parent::sortFilesAndDirectories(parent::getDirectories($path), $sort_type);
+        $path = $this->getCurrentPath();
 
         return [
             'html' => (string)view($this->getView())->with([
-                'files'       => $files,
-                'directories' => $directories,
-                'items'       => array_merge($directories, $files)
+                'files'       => $this->getFilesWithInfo($path),
+                'directories' => $this->getDirectories($path)
             ]),
-            'working_dir' => parent::getInternalPath($path)
+            'working_dir' => $this->getInternalPath($path)
         ];
     }
 
@@ -40,7 +35,7 @@ class ItemsController extends LfmController
         if ($show_list === "1") {
             $view_type = 'list';
         } elseif (is_null($show_list)) {
-            $type_key = parent::currentLfmType();
+            $type_key = $this->currentLfmType();
             $startup_view = config('lfm.' . $type_key . 's_startup_view');
 
             if (in_array($startup_view, ['list', 'grid'])) {

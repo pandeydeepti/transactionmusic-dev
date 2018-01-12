@@ -23,7 +23,7 @@ class CreateDefaultFolder
             return;
         }
 
-        if ($type === 'share' && !$this->allowShareFolder()) {
+        if ($type === 'share' && (!$this->enabledShareFolder()  || !$this->allowMultiUser())) {
             return;
         }
 

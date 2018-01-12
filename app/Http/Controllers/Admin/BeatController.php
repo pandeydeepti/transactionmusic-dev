@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Rate;
 use App\Http\Controllers\Controller;
 use App\Beat;
+use App\Producer;
+use App\SoundLike;
 use Illuminate\Http\Request;
 use DB;
 use App\Http\Requests;
@@ -12,9 +14,14 @@ use JavaScript;
 use File;
 use App\ShopOption;
 use Illuminate\Support\Facades\Config;
+use Log;
+
+use App\Http\Controllers\Admin\SubinstanceController;
+
 use GuzzleHttp\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Common\Event;
+
 class BeatController extends Controller
 {
     private $global_paypal = '';
@@ -32,13 +39,16 @@ class BeatController extends Controller
          *
          * @return All Beats with Producers
          */
-        $beats = DB::table('beats')->select(DB::raw('(beats.title) AS Beat, beats.active, beats.exclusive_active, beats.id, GROUP_CONCAT(categories.title) AS Producers'))
+          $beats = DB::table('beats')->select(DB::raw('(beats.title) AS Beat, beats.active, beats.exclusive_active, beats.id, producers.title AS Producers, producers.id AS pro_id, GROUP_CONCAT(sound_likes.id) AS snd_id'))
             ->join('beat_categories', 'beats.id', '=', 'beat_categories.beat_id')
+            ->join('beat_producers', 'beats.id', '=', 'beat_producers.beat_id')
+            ->join('producers', 'beat_producers.producer_id', '=', 'producers.id')
+            ->join('beat_sound_likes', 'beats.id', '=', 'beat_sound_likes.beat_id')
+            ->join('sound_likes', 'beat_sound_likes.sound_like_id', '=', 'sound_likes.id')
             ->join('categories', 'beat_categories.category_id', '=', 'categories.id')
             ->join('category_taxonomies', 'category_taxonomies.category_id', '=', 'categories.id')
             ->join('taxonomies', 'category_taxonomies.taxonomy_id', '=', 'taxonomies.id')
-            ->where('taxonomies.id', 3)
-            ->groupBy('beats.id', 'Beat')->orderBy('beats.active', 'DESC')->get();
+            ->groupBy('beats.id')->orderBy('beats.active', 'DESC')->get();
 
         JavaScript::put(['message' => session('data')['message'],'type' => session('data')['type']]);
 
@@ -61,12 +71,17 @@ class BeatController extends Controller
     public function create($id = null)
     {
         if(isset($id)){
-            $beat = DB::table('beats')->select(DB::raw('beats.*, GROUP_CONCAT(categories.id) AS cat_id, GROUP_CONCAT(categories.active) as cat_active'))
+            $beat = DB::table('beats')->select(DB::raw('beats.*, GROUP_CONCAT(categories.id) AS cat_id, GROUP_CONCAT(categories.active) as cat_active, producers.title AS Producers, GROUP_CONCAT(producers.id) AS pro_id, GROUP_CONCAT(sound_likes.id) AS snd_id'))
                 ->join('beat_categories', 'beats.id', '=', 'beat_categories.beat_id')
+                ->join('beat_producers', 'beats.id', '=', 'beat_producers.beat_id')
+                ->join('producers', 'beat_producers.producer_id', '=', 'producers.id')
+                ->join('beat_sound_likes', 'beats.id', '=', 'beat_sound_likes.beat_id')
+                ->join('sound_likes', 'beat_sound_likes.sound_like_id', '=', 'sound_likes.id')
                 ->join('categories', 'beat_categories.category_id', '=', 'categories.id')
                 ->join('category_taxonomies', 'categories.id', '=', 'category_taxonomies.category_id')
-                ->join('taxonomies', 'taxonomies.id', '=', 'category_taxonomies.taxonomy_id')->where('beats.id', '=', $id)->groupBy('beats.id')
+                ->join('taxonomies', 'taxonomies.id', '=', 'category_taxonomies.taxonomy_id')->where('beats.id', $id)->groupBy('beats.id')
                 ->first();
+
             $beat->rate = $this->average($beat->id);
 
             if(!empty($beat->cover)) {
@@ -75,6 +90,11 @@ class BeatController extends Controller
             }
 
             $beat->cat_id = explode(",",$beat->cat_id);
+
+            $beat->pro_id = explode(",", $beat->pro_id);
+            
+            $beat->snd_id = explode(",", $beat->snd_id);
+
             JavaScript::put([
                 'message' => session('data')['message'] ,
                 'type' => session('data')['type'],
@@ -93,12 +113,19 @@ class BeatController extends Controller
 
         $grouped = $this->array_group_by($categories, 'name');
 
+        $producers = DB::table('producers')->select(DB::raw('(producers.title) AS producers, (producers.active) as pro_active, producers.id'))
+            ->where('title', '!=', '')->get()->toArray();
+            
+        $sound_likes = DB::table('sound_likes')->select(DB::raw('(sound_likes.title) AS sound_likes, (sound_likes.active) as pro_active, sound_likes.id'))
+            ->where('title', '!=', '')->get()->toArray();
+
+
         if(isset($id)) {
-            return View('admin.beats.create', ['categories' => $grouped, 'beat' => $beat]);
+            return View('admin.beats.create', ['categories' => $grouped, 'beat' => $beat, 'producers' => $producers, 'sound_likes' => $sound_likes]);
         } else {
             if((float)ShopOption::where('meta_key', 'instance_storage')->first()['meta_value'] < 2048.00)
             {
-                return View('admin.beats.create', ['categories' => $grouped]);
+                return View('admin.beats.create', ['categories' => $grouped, 'producers' => $producers, 'sound_likes' => $sound_likes]);
             } else {
                 return redirect()->back()->with('data', [ 'message'  => 'You are exceed 2 GB limit, can\'t upload new beats', 'type' => 'error']);
             }
@@ -142,6 +169,15 @@ class BeatController extends Controller
             $categories = $request->all()['categories'];
             $beat->categories()->attach($categories);
         }
+        if (isset($request->all()['producers'])) {
+            $producers = $request->all()['producers'];
+            $beat->producers()->attach($producers);
+        }
+        if (isset($request->all()['sound_likes'])) {
+            $sound_likes = $request->all()['sound_likes'];
+            $beat->sound_likes()->attach($sound_likes);
+        }
+
         if($request->rate != '')
             Rate::insert(['beat_id' => $beat->id, 'amount' => $request->rate, 'ip' => $request->ip()]);
 
@@ -186,6 +222,13 @@ class BeatController extends Controller
 
         $categories = $request->all()['categories'];
         $beat->categories()->sync($categories);
+
+        $producers = $request->all()['producers'];
+        $beat->producers()->sync($producers);
+        
+        $sound_likes = $request->all()['sound_likes'];
+        $beat->sound_likes()->sync($sound_likes);
+
 
         if($request->rate != ''){
             try{
@@ -270,6 +313,8 @@ class BeatController extends Controller
 
         try {
             $beat->categories()->detach($id);
+            $beat->producers()->detach($id);
+            $beat->sound_likes()->detach($id);
             $beat->delete();
             $this->generate_beat_JSON();
             ShopOption::where('meta_key',
@@ -360,86 +405,75 @@ class BeatController extends Controller
 
         $beats = DB::select(DB::raw('
            SELECT
-             AVG(rates.amount)  AS rate,
-             GROUP_CONCAT(categories.title) AS category_list,
+                AVG(rates.amount)  AS rate,
+                GROUP_CONCAT(categories.title) AS category_list,
+                GROUP_CONCAT(IFNULL(categories.cover, "0")) AS categories_cover,
+                 (
 
-             (
+                    SELECT beats.bpm
 
-                SELECT beats.bpm
+                 ) AS bpm,
 
-             ) AS bpm,
+                producers.title AS producer,
+                sound_likes.title AS sounds_like,
+                
+                (
 
-             (
+                    SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
+                    INNER JOIN categories on categories.id = beat_categories.category_id
+                    INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
+                    INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
+                    WHERE taxonomies.id = 2 AND beat_categories.beat_id = beats.id
 
-                SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
-                INNER JOIN categories on categories.id = beat_categories.category_id
-                INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
-                INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
-                WHERE taxonomies.id = 3 AND beat_categories.beat_id = beats.id
+                 ) AS instruments,
 
-             ) AS producer,
+                 (
 
-             (
+                    SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
+                    INNER JOIN categories on categories.id = beat_categories.category_id
+                    INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
+                    INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
+                    WHERE taxonomies.id = 1 AND beat_categories.beat_id = beats.id
 
-                SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
-                INNER JOIN categories on categories.id = beat_categories.category_id
-                INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
-                INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
-                WHERE taxonomies.id = 4 AND beat_categories.beat_id = beats.id
-
-              ) AS sounds_like,
-
-              (
-
-                SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
-                INNER JOIN categories on categories.id = beat_categories.category_id
-                INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
-                INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
-                WHERE taxonomies.id = 2 AND beat_categories.beat_id = beats.id
-
-             ) AS instruments,
-
-             (
-
-                SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
-                INNER JOIN categories on categories.id = beat_categories.category_id
-                INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
-                INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
-                WHERE taxonomies.id = 1 AND beat_categories.beat_id = beats.id
-
-             ) AS genre,
+                 ) AS genre,
 
 
-             (beats.id) as beat_id,
-             (beats.active),
-             (beats.title) as beat_title,
-             (beats.cover) as beat_cover,
-             (beats.mp3) as beat_mp3,
-             (beats.mp3_price) as beat_mp3_price,
-             (beats.wav) as beat_wav,
-             (beats.wav_price) as beat_wav_price,
-             (beats.tracked_out) as beat_tracked_out,
-             (beats.tracked_out_price) as beat_tracked_out_price,
-             (beats.exclusive_price) as beat_exclusive_price,
-             (beats.created_at) as beat_created_at
+                 (beats.id) as beat_id,
+                 (beats.active),
+                 (beats.title) as beat_title,
+                 (beats.cover) as beat_cover,
+                 (beats.mp3) as beat_mp3,
+                 (beats.mp3_price) as beat_mp3_price,
+                 (beats.wav) as beat_wav,
+                 (beats.wav_price) as beat_wav_price,
+                 (beats.tracked_out) as beat_tracked_out,
+                 (beats.tracked_out_price) as beat_tracked_out_price,
+                 (beats.exclusive_price) as beat_exclusive_price,
+                 (beats.created_at) as beat_created_at
 
-             FROM beats
-             LEFT JOIN rates ON
-                beats.id = rates.beat_id
-             INNER JOIN beat_categories ON
-                beats.id = beat_categories.beat_id
-             INNER JOIN categories ON
-                beat_categories.category_id = categories.id
-             INNER JOIN category_taxonomies ON
-                categories.id = category_taxonomies.category_id
-             INNER JOIN taxonomies ON
-                category_taxonomies.taxonomy_id = taxonomies.id
+                 FROM beats
+                 LEFT JOIN rates ON
+                    beats.id = rates.beat_id
+                 INNER JOIN beat_categories ON
+                    beats.id = beat_categories.beat_id
+                INNER JOIN beat_producers ON  
+                    beat_producers.beat_id = beats.id
+			    INNER JOIN producers ON  
+			        beat_producers.producer_id = producers.id
+			    INNER JOIN beat_sound_likes ON  
+			        beats.id = beat_sound_likes.beat_id
+			    INNER JOIN sound_likes ON  
+			        beat_sound_likes.sound_like_id = sound_likes.id
+                 INNER JOIN categories ON
+                    beat_categories.category_id = categories.id
+                 INNER JOIN category_taxonomies ON
+                    categories.id = category_taxonomies.category_id
+                 INNER JOIN taxonomies ON
+                    category_taxonomies.taxonomy_id = taxonomies.id
+                 WHERE(beats.active = 1)
+                 GROUP BY beats.id
 
-             WHERE beats.active = 1
-
-             GROUP BY beats.id
-
-             ORDER BY beats.created_at DESC
+                 ORDER BY beats.created_at DESC
 
          '));
 
@@ -451,6 +485,48 @@ class BeatController extends Controller
                 ->join('categories', 'category_taxonomies.category_id', 'categories.id')
                 ->where('categories.active', 1)
                 ->groupBy('taxonomies.name')->get();
+                
+            $filter_producers = DB::table('producers')->select(DB::raw('GROUP_CONCAT(producers.id) AS categories_id, GROUP_CONCAT(producers.title) AS categories_title, GROUP_CONCAT(producers.cover) AS categories_cover'))
+                ->join('beat_producers', 'producers.id', '=', 'beat_producers.producer_id')
+                ->where('producers.active', 1)
+                ->get();
+                
+            $filter_sound_likes = DB::table('sound_likes')->select(DB::raw('GROUP_CONCAT(sound_likes.id) AS categories_id, GROUP_CONCAT(sound_likes.title) AS categories_title, GROUP_CONCAT(sound_likes.cover) AS categories_cover'))
+                ->join('beat_sound_likes', 'sound_likes.id', '=', 'beat_sound_likes.sound_like_id')
+                ->where('sound_likes.active', 1)
+                ->get();
+
+            $filters[0] = array(
+                'name' => "GENRE",
+                'categories_id' => $filters[0]->categories_id,
+                'categories_title' => $filters[0]->categories_title,
+                'categories_cover' => $filters[0]->categories_cover,
+                
+                );
+                
+            $filters[1] = array(
+                'name' => "INSTRUMENTS",
+                'categories_id' => $filters[1]->categories_id,
+                'categories_title' => $filters[1]->categories_title,
+                'categories_cover' => $filters[1]->categories_cover,
+                
+                );
+                
+            $filters[2] = array(
+                'name' => "PRODUCER",
+                'categories_id' => $filter_producers[0]->categories_id,
+                'categories_title' => $filter_producers[0]->categories_title,
+                'categories_cover' => $filter_producers[0]->categories_cover,
+                
+                );
+                
+            $filters[3] = array(
+                'name' => "SOUNDS LIKE",
+                'categories_id' => $filter_sound_likes[0]->categories_id,
+                'categories_title' => $filter_sound_likes[0]->categories_title,
+                'categories_cover' => $filter_sound_likes[0]->categories_cover,
+                
+                );
 
             $filters = (array)$filters;
             array_map(array($this, "organize_cat_JSON"), $filters);

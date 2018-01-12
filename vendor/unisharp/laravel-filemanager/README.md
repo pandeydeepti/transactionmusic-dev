@@ -4,21 +4,40 @@
 [![License](https://poser.pugx.org/unisharp/laravel-filemanager/license)](https://packagist.org/packages/unisharp/laravel-filemanager)
 
  * Document : [unisharp.github.io/laravel-filemanager](http://unisharp.github.io/laravel-filemanager/)
-   * [Installation](http://unisharp.github.io/laravel-filemanager/installation)
-   * [Integration](http://unisharp.github.io/laravel-filemanager/integration)
-   * [Config](http://unisharp.github.io/laravel-filemanager/config)
-   * [Customization](http://unisharp.github.io/laravel-filemanager/customization)
-   * [Events](http://unisharp.github.io/laravel-filemanager/events)
-   * [Upgrade](http://unisharp.github.io/laravel-filemanager/upgrade)
  * Demo : [Laravel Filemanager container](https://github.com/UniSharp/laravel-filemanager-example-5.3)
 
 ## v1.7 released
- * Please follow the intructions in [upgrade document](https://unisharp.github.io/laravel-filemanager/upgrade).
  * Important changes :
-   * All code refactored.
-   * Fix Windows compatibility.
-   * Fix file cannot be uploaded to "File Mode".
-   * Config file is also refactored, see [config document](https://unisharp.github.io/laravel-filemanager/config).
+  * All code refactored.
+  * Fix Windows compatibility.
+  * Fix file cannot be uploaded to "File Mode".
+  * Config file is also refactored, see [config document](https://unisharp.github.io/laravel-filemanager/config).
+ * Please follow the intructions in [this document](https://unisharp.github.io/laravel-filemanager/upgrade) to upgrade.
+
+## Features
+ * CKEditor and TinyMCE integration
+ * Standalone button
+ * Uploading validation
+ * Cropping and resizing of images
+ * Public and private folders for multi users
+ * Customizable routes, middlewares, views, and folder path
+ * Supports two types : files and images. Each type works in different directory.
+ * Supported locales : ar, bg, de, el, en, es, fa, fr, he, hu, nl, pl, pt-BR, pt_PT, ro, ru, tr, zh-CN, zh-TW
+
+PR is welcome!
+
+## Screenshots
+> Standalone button :
+
+![Standalone button demo](https://unisharp.github.io/laravel-filemanager/images/lfm01.png)
+
+> Grid view :
+
+![Grid view demo](https://unisharp.github.io/laravel-filemanager/images/lfm02.png)
+
+> List view :
+
+![List view demo](https://unisharp.github.io/laravel-filemanager/images/lfm03.png)
   
 ## Credits
 Special thanks to

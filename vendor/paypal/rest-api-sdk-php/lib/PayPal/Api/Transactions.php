@@ -39,4 +39,14 @@ class Transactions extends PayPalModel
         return $this->amount;
     }
 
+    /**
+     * Amount being collected.
+     *
+     * @return \PayPal\Api\Amount
+     */
+    public function getItemList()
+    {
+        return $this->item_list;
+    }
+
 }

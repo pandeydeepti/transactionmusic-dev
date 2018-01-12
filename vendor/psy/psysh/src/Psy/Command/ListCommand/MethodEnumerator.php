@@ -77,7 +77,7 @@ class MethodEnumerator extends Enumerator
             }
         }
 
-        // @todo this should be natcasesort
+        // TODO: this should be natcasesort
         ksort($methods);
 
         return $methods;

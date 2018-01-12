@@ -60,14 +60,9 @@ trait LfmHelpers
         }
 
         $prefix = config('lfm.' . $this->currentLfmType() . 's_folder_name', $default_folder_name);
-        $base_directory = config('lfm.base_directory', 'public');
 
         if ($type === 'dir') {
-            $prefix = $base_directory . '/' . $prefix;
-        }
-
-        if ($type === 'url' && $base_directory !== 'public') {
-            $prefix = 'laravel-filemanager/' . $prefix;
+            $prefix = config('lfm.base_directory', 'public') . '/' . $prefix;
         }
 
         return $prefix;
@@ -96,9 +91,9 @@ trait LfmHelpers
         }
 
         $thumb_folder_name = config('lfm.thumb_folder_name');
-        // if user is inside thumbs folder, there is no need
-        // to add thumbs substring to the end of url
-        $in_thumb_folder = str_contains($this->getFormatedWorkingDir(), $this->ds . $thumb_folder_name);
+        //if user is inside thumbs folder there is no need
+        // to add thumbs substring to the end of $url
+        $in_thumb_folder = preg_match('/'.$thumb_folder_name.'$/i', $this->getFormatedWorkingDir());
 
         if (!$in_thumb_folder) {
             return $thumb_folder_name . $this->ds;
@@ -207,22 +202,23 @@ trait LfmHelpers
 
     public function isProcessingImages()
     {
-        return lcfirst(str_singular(request('type'))) === 'image';
+        return $this->currentLfmType() === 'image';
     }
 
     public function isProcessingFiles()
     {
-        return !$this->isProcessingImages();
+        return $this->currentLfmType() === 'file';
     }
 
-    public function currentLfmType()
+    public function currentLfmType($is_for_url = false)
     {
-        $file_type = 'file';
-        if ($this->isProcessingImages()) {
-            $file_type = 'image';
-        }
+        $file_type = request('type', 'Images');
 
-        return $file_type;
+        if ($is_for_url) {
+            return ucfirst($file_type);
+        } else {
+            return lcfirst(str_singular($file_type));
+        }
     }
 
     public function allowMultiUser()
@@ -230,26 +226,9 @@ trait LfmHelpers
         return config('lfm.allow_multi_user') === true;
     }
 
-    public function allowShareFolder()
+    public function enabledShareFolder()
     {
-        if (!$this->allowMultiUser()) {
-            return true;
-        }
-
         return config('lfm.allow_share_folder') === true;
-    }
-
-    public function applyIniOverrides()
-    {
-        if (count(config('lfm.php_ini_overrides')) == 0) {
-            return;
-        }
-
-        foreach (config('lfm.php_ini_overrides') as $key => $value) {
-            if ($value && $value != 'false') {
-                ini_set($key, $value);
-            }
-        }
     }
 
 
@@ -259,67 +238,67 @@ trait LfmHelpers
 
     public function getDirectories($path)
     {
-        return array_map(function ($directory) {
-            return $this->objectPresenter($directory);
-        }, array_filter(File::directories($path), function ($directory) {
-            return $this->getName($directory) !== config('lfm.thumb_folder_name');
-        }));
+        $thumb_folder_name = config('lfm.thumb_folder_name');
+        $all_directories = File::directories($path);
+
+        $arr_dir = [];
+
+        foreach ($all_directories as $directory) {
+            $directory_name = $this->getName($directory);
+
+            if ($directory_name !== $thumb_folder_name) {
+                $arr_dir[] = (object)[
+                    'name' => $directory_name,
+                    'path' => $this->getInternalPath($directory)
+                ];
+            }
+        }
+
+        return $arr_dir;
     }
 
     public function getFilesWithInfo($path)
     {
-        return array_map(function ($file) {
-            return $this->objectPresenter($file);
-        }, File::files($path));
-    }
+        $arr_files = [];
 
-    public function objectPresenter($item)
-    {
-        $item_name = $this->getName($item);
-        $is_file = is_file($item);
+        foreach (File::files($path) as $key => $file) {
+            $file_name = $this->getName($file);
 
-        if (!$is_file) {
-            $file_type = trans('laravel-filemanager::lfm.type-folder');
-            $icon = 'fa-folder-o';
-            $thumb_url = asset('vendor/laravel-filemanager/img/folder.png');
-        } elseif ($this->fileIsImage($item)) {
-            $file_type = $this->getFileType($item);
-            $icon = 'fa-image';
-
-            $thumb_path = $this->getThumbPath($item_name);
-            $file_path = $this->getCurrentPath($item_name);
-            if ($this->imageShouldNotHaveThumb($file_path)) {
-                $thumb_url = $this->getFileUrl($item_name) . '?timestamp=' . filemtime($file_path);
-            } elseif (File::exists($thumb_path)) {
-                $thumb_url = $this->getThumbUrl($item_name) . '?timestamp=' . filemtime($thumb_path);
+            if ($this->fileIsImage($file)) {
+                $file_type = File::mimeType($file);
+                $icon = 'fa-image';
             } else {
-                $thumb_url = $this->getFileUrl($item_name) . '?timestamp=' . filemtime($file_path);
+                $extension = strtolower(File::extension($file_name));
+                $file_type = config('lfm.file_type_array.' . $extension) ?: 'File';
+                $icon = config('lfm.file_icon_array.' . $extension) ?: 'fa-file';
             }
-        } else {
-            $extension = strtolower(File::extension($item_name));
-            $file_type = config('lfm.file_type_array.' . $extension) ?: 'File';
-            $icon = config('lfm.file_icon_array.' . $extension) ?: 'fa-file';
-            $thumb_url = null;
+
+            $thumb_path = $this->getThumbPath($file_name);
+            if (File::exists($thumb_path)) {
+                $thumb_url = $this->getThumbUrl($file_name) . '?timestamp=' . filemtime($thumb_path);
+            } else {
+                $thumb_url = null;
+            }
+
+
+            $arr_files[$key] = [
+                'name'      => $file_name,
+                'url'       => $this->getFileUrl($file_name),
+                'size'      => $this->humanFilesize(File::size($file)),
+                'updated'   => filemtime($file),
+                'type'      => $file_type,
+                'icon'      => $icon,
+                'thumb'     => $thumb_url
+            ];
         }
 
-        return (object)[
-            'name'    => $item_name,
-            'url'     => $is_file ? $this->getFileUrl($item_name) : '',
-            'size'    => $is_file ? $this->humanFilesize(File::size($item)) : '',
-            'updated' => filemtime($item),
-            'path'    => $is_file ? '' : $this->getInternalPath($item),
-            'time'    => date("Y-m-d h:m", filemtime($item)),
-            'type'    => $file_type,
-            'icon'    => $icon,
-            'thumb'   => $thumb_url,
-            'is_file' => $is_file
-        ];
+        return $arr_files;
     }
 
     public function createFolderByPath($path)
     {
         if (!File::exists($path)) {
-            File::makeDirectory($path, 0777, true, true);
+            File::makeDirectory($path, $mode = 0777, true, true);
         }
     }
 
@@ -330,45 +309,13 @@ trait LfmHelpers
 
     public function fileIsImage($file)
     {
-        $mime_type = $this->getFileType($file);
-
-        return starts_with($mime_type, 'image');
-    }
-
-    public function imageShouldNotHaveThumb($file)
-    {
-        $mine_type = $this->getFileType($file);
-        $noThumbType = ['image/gif', 'image/svg+xml'];
-
-        return in_array($mine_type, $noThumbType);
-    }
-
-    public function getFileType($file)
-    {
         if ($file instanceof UploadedFile) {
             $mime_type = $file->getMimeType();
         } else {
             $mime_type = File::mimeType($file);
         }
 
-        return $mime_type;
-    }
-
-    public function sortFilesAndDirectories($arr_items, $sort_type)
-    {
-        if ($sort_type == 'time') {
-            $key_to_sort = 'updated';
-        } elseif ($sort_type == 'alphabetic') {
-            $key_to_sort = 'name';
-        } else {
-            $key_to_sort = 'updated';
-        }
-
-        uasort($arr_items, function ($a, $b) use ($key_to_sort) {
-            return strcmp($a->{$key_to_sort}, $b->{$key_to_sort});
-        });
-
-        return $arr_items;
+        return starts_with($mime_type, 'image');
     }
 
 
@@ -378,14 +325,9 @@ trait LfmHelpers
 
     public function getUserSlug()
     {
-        if (is_callable(config('lfm.user_field'))) {
-            $slug_of_user = call_user_func(config('lfm.user_field'));
-        } else {
-            $old_slug_of_user = config('lfm.user_field');
-            $slug_of_user = empty(auth()->user()) ? '' : auth()->user()->$old_slug_of_user;
-        }
+        $slug_of_user = config('lfm.user_field');
 
-        return $slug_of_user;
+        return empty(auth()->user()) ? '' : auth()->user()->$slug_of_user;
     }
 
     public function error($error_type, $variables = [])

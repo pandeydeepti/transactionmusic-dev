@@ -22,22 +22,17 @@ class FolderController extends LfmController
             $folder_types['user'] = 'root';
         }
 
-        if (parent::allowShareFolder()) {
+        if ((parent::allowMultiUser() && parent::enabledShareFolder()) || !parent::allowMultiUser()) {
             $folder_types['share'] = 'shares';
         }
 
         foreach ($folder_types as $folder_type => $lang_key) {
             $root_folder_path = parent::getRootFolderPath($folder_type);
 
-            $children = parent::getDirectories($root_folder_path);
-            usort($children, function ($a, $b) {
-                return strcmp($a->name, $b->name);
-            });
-
             array_push($root_folders, (object)[
                 'name' => trans('laravel-filemanager::lfm.title-' . $lang_key),
                 'path' => parent::getInternalPath($root_folder_path),
-                'children' => $children,
+                'children' => parent::getDirectories($root_folder_path),
                 'has_next' => !($lang_key == end($folder_types))
             ]);
         }
@@ -54,19 +49,19 @@ class FolderController extends LfmController
      */
     public function getAddfolder()
     {
-        $folder_name = parent::translateFromUtf8(trim(request('name')));
+        $folder_name = $this->translateFromUtf8(trim(request('name')));
 
         $path = parent::getCurrentPath($folder_name);
 
         if (empty($folder_name)) {
-            return parent::error('folder-name');
+            return $this->error('folder-name');
         } elseif (File::exists($path)) {
-            return parent::error('folder-exist');
+            return $this->error('folder-exist');
         } elseif (config('lfm.alphanumeric_directory') && preg_match('/[^\w-]/i', $folder_name)) {
-            return parent::error('folder-alnum');
+            return $this->error('folder-alnum');
         } else {
-            parent::createFolderByPath($path);
-            return parent::$success_response;
+            $this->createFolderByPath($path);
+            return $this->success_response;
         }
     }
 }
