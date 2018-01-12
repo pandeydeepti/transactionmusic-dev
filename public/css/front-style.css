@@ -1286,7 +1286,7 @@ li {
 }/*(max-width: 1850px)*/
 @media all and (max-width: 1660px) {
     .sortby-select-inner-wrapper {
-        max-width: 83%;
+        max-width: 82%;
     }
     .newest-beats-main-wrapper {
         max-width: 85.1%;
