@@ -823,8 +823,9 @@ div.ajax-file-upload-filename{
     font-size: 10px;
 }
 .ajax-please-wait-style{
-    font-size: 14px !important;
-    text-indent: 20px;
+    font-size: 12px !important;
+       padding-top: 2px;
+    text-indent: 9px;
 }
 .ajax-file-upload {
     width: 100%;
@@ -1402,12 +1403,12 @@ input[name='daterange'], #date-range-wrapper h4{
 }
 @media screen and (max-width: 1370px) {
     .main-admin-wrapper label {
-        font-size: 20px;
+        font-size: 17px;
     }
 }
 @media screen and (max-width: 1300px) {
     .main-admin-wrapper label {
-        font-size: 18px;
+        font-size: 16px;
     }
 }
 
@@ -1434,3 +1435,8 @@ text-align:left;
 width:100%
 text-indent:10px;
 }
+.sound-like select {
+  height: 50px;
+  width: 100%;
+}
+.sound-like select{width:100%;}
