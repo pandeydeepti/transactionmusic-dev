@@ -7,7 +7,7 @@ use App\Page;
 use DB;
 use JavaScript;
 use App\ShopOption;
-use Symfony\Component\HttpFoundation\Request
+use Symfony\Component\HttpFoundation\Request;
 
 class BeatController extends Controller
 {
