@@ -1,60 +1,60 @@
 .login button{
-    color: #7c19fb;
+    color: #19CEFB;
 }
 .sidebar ul li.active {
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 .sidebar ul li:hover {
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 .title-page {
-    color: #7c19fb;
+    color: #19CEFB;
 }
 .main-color {
-    color: #7c19fb;
+    color: #19CEFB;
 }
 .add-new-beat:hover, .add-new-category:hover,  .add-new-page:hover, .add-new-subintance:hover, button.add-new-faq-btn:hover, button.add-new-producer-btn:hover{
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 #myTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover, #categoryTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover, #pageTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover,  #subintanceTable_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button:hover{
-    background: #7c19fb;
-    border: 1px solid #7c19fb;
+    background: #19CEFB;
+    border: 1px solid #19CEFB;
 }
 .add-category-main-wrapper button:hover {
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 .toggle-checkbox input:checked + .slider{
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 .btn-save button, #save-embed {
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 div.ajax-file-upload:hover {
-    background: #7c19fb;
+    background: #19CEFB;
 }
 .add-category-main-wrapper input[type = checkbox]:checked {
-    background: #7c19fb;
+    background: #19CEFB;
 }
 .beat-single-title, .category-single-title, table.dataTable tbody tr td .subintance-single-title a {
-    color: #7c19fb !important;
+    color: #19CEFB !important;
 }
 div.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
-    border: 1px solid #7c19fb;
-    color: #7c19fb !important;
+    border: 1px solid #19CEFB;
+    color: #19CEFB !important;
 }
 div.ajax-file-upload-filename {
-    background: #7c19fb;
+    background: #19CEFB;
 }
 div.dataTables_wrapper .dataTables_paginate .paginate_button.next, div.dataTables_wrapper .dataTables_paginate .paginate_button.previous {
-    border: 1px solid #7c19fb;
-    color: #7c19fb !important;
+    border: 1px solid #19CEFB;
+    color: #19CEFB !important;
 }
 .beats-index .loader-wrapper, .category-index-main-wrapper .loader-wrapper {
-    color: #7c19fb;
+    color: #19CEFB;
 }
 .toggle-category-checkbox input:checked + .slider, .toggle-beat-checkbox input:checked + .slider, .toggle-exclusive-checkbox input:checked + .slider, .toggle-instance-state input:checked + .slider, .toggle-page-checkbox input:checked + .slider, .toggle-edit-page-checkbox input:checked + .slider{
-    background-color: #7c19fb;
+    background-color: #19CEFB;
 }
 table.dataTable.hover tbody tr:hover, table#subintanceTable.dataTable.hover tbody tr:hover .edit-link-hover{
-    color: #7c19fb;
+    color: #19CEFB;
 }
