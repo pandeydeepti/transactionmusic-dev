@@ -197,7 +197,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div> <!-- file-types-single-row 3-->
-
+<div style="clear:both;"></div>
 
                                                             <div class="file-types-single-row clearfix"> <!-- file-types-single-row 4-->
                                                                 <div class="col-sm-3">
