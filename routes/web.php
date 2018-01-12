@@ -83,6 +83,22 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:web']], function () {
 
     Route::get('/embed', 'Admin\ShopOptionController@embed');
     Route::post('/embed', 'Admin\ShopOptionController@store_embed');
+    
+    Route::get('/producers', 'Admin\ProducerController@index');
+    Route::get('/producers/create', 'Admin\ProducerController@create');
+    Route::get('/producers/edit/{id}', 'Admin\ProducerController@edit');
+    Route::get('/producers/delete/{id}', 'Admin\ProducerController@delete');
+    Route::post('/producers/update', 'Admin\ProducerController@update');
+    Route::post('/producers/create', 'Admin\ProducerController@store');
+    Route::post('/producers/active/{id}', 'Admin\ProducerController@active');
+    
+    Route::get('/sounds_like', 'Admin\SoundLikeController@index');
+    Route::get('/sounds_like/create', 'Admin\SoundLikeController@create');
+    Route::get('/sounds_like/edit/{id}', 'Admin\SoundLikeController@edit');
+    Route::get('/sounds_like/delete/{id}', 'Admin\SoundLikeController@delete');
+    Route::post('/sounds_like/update', 'Admin\SoundLikeController@update');
+    Route::post('/sounds_like/create', 'Admin\SoundLikeController@store');
+    Route::post('/sounds_like/active/{id}', 'Admin\SoundLikeController@active');
 
     Route::get('/shop_options', 'Admin\ShopOptionController@index');
     Route::get('/shop_options/paypal', 'Admin\ShopOptionController@index');
