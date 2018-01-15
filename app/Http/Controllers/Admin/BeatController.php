@@ -328,22 +328,22 @@ class BeatController extends Controller
     }
     public function organize_single_cat_JSON($single_cat){
 
-        $categories_id_arr = explode(',', $single_cat->categories_id);
-        $categories_title_arr = explode(',', $single_cat->categories_title );
-        $categories_cover_arr = explode(',', $single_cat->categories_cover );
+        $categories_id_arr = explode(',', $single_cat['categories_id']);
+        $categories_title_arr = explode(',', $single_cat['categories_title']);
+        $categories_cover_arr = explode(',', $single_cat['categories_cover']);
 
-        $this->global_object['filters'][strtolower($single_cat->name)]['categories'] = array();
+        $this->global_object['filters'][strtolower($single_cat['name'])]['categories'] = array();
+        foreach ($categories_id_arr as $index => $single_cat_ref) {
 
-        foreach( $categories_id_arr as $index => $single_cat_ref ){
-            array_push( $this->global_object['filters'][strtolower($single_cat->name)]['categories'],
+            array_push($this->global_object['filters'][strtolower($single_cat['name'])]['categories'],
 
                 array(
-                    'title'     => $categories_title_arr[ $index ],
-                    'id'        => $single_cat_ref,
-                    'cover'     => $categories_cover_arr[ $index ]
-                ) );
+                    'title' => $categories_title_arr[$index],
+                    'id' => $single_cat_ref,
+                    'cover' => $categories_cover_arr[$index]
+                ));
         }
-        $this->global_object['filters'][strtolower($single_cat->name)]['cover'] = $single_cat->taxonomy_cover;
+        $this->global_object['filters'][strtolower($single_cat['name'])]['cover'] = $single_cat['categories_cover'];
 
     }
     public function organize_JSON( $beats ){
