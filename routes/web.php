@@ -41,6 +41,7 @@ Route::post('/contact', 'ContactController@store');
 Route::post('payment', 'TransactionController@postPayment');
 Route::get('payment/status', 'TransactionController@getPaymentStatus');
 Route::get('/embed/player', 'Admin\ShopOptionController@embed_code');
+Route::post('/transaction/state', 'TransactionController@tm_transaction_state');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:web']], function () {
 
