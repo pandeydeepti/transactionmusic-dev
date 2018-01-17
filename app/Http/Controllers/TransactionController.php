@@ -586,9 +586,9 @@ class TransactionController extends BeatController
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_URL, 'https://api-3t.sandbox.paypal.com/nvp');
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array(
-                'USER' => 'duka_api1.duka.com',
-                'PWD' => 'FGDDRYEQZTNHRZMQ',
-                'SIGNATURE' => 'AFcWxV21C7fd0v3bYYYRCpSSRl31AOgJHGa8xOuKy0jdj.f5O-OBdSvI',
+                'USER' => 'champak.ray-merchant_api1.example.com',
+                'PWD' => 'GDBVNH5DZKJ527S6',
+                'SIGNATURE' => 'AKwVSAdKHfS2rPeRpMTEQpMZppwVAu4CffFjSQAiCg6DTylbCWe.fPiU',
                 'METHOD' => 'MassPay',
                 'VERSION' => '99',
                 'CURRENCYCODE' => 'USD',
