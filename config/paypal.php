@@ -3,7 +3,7 @@ return array(
    
    // set your paypal credential
     'client_id' => 'ATOQp9Nup9kNXpU-rU_EKbBnV95jIMf1SWMuENFOpcNKv7UFeq5WkeXfqYcGpVlfXLUHRQ_swWZjmplj',
-    'secret' => ' ECIf-pPdobpDxD92jZzXEaHGgaK3HIvRSxGKTH7-uWy2Td0YqvVGclLaxwigKjJRycNFhnzx384ylq0t',
+    'secret' => 'ECIf-pPdobpDxD92jZzXEaHGgaK3HIvRSxGKTH7-uWy2Td0YqvVGclLaxwigKjJRycNFhnzx384ylq0t',
 
 
     /**
