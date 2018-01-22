@@ -27,7 +27,8 @@ class BannerController extends Controller
     public function update(Request $request)
     {
         $banners = [];
-
+        $urli = '';
+        
         for ($i = 0; $i < count($request->name); $i++) {
 
             $banner = Banner::where('name', $request->name[$i])->first();
@@ -35,7 +36,7 @@ class BannerController extends Controller
 
             $parsed = parse_url($request->url[$i]);
             if (empty($parsed['scheme'])) {
-                $request->url[$i] = 'http://' . ltrim($request->url[$i], '/');
+                $urli = 'http://' . ltrim($request->url[$i], '/');
             }
             
             if( $banner == null )
@@ -43,11 +44,11 @@ class BannerController extends Controller
                 $banners[] = [
                     'name' => $request->name[$i],
                     'file_path' => $banner_file_path,
-                    'url' => !empty( $request->url[$i] ) ? $request->url[$i] : null
+                    'url' => !empty( $urli ) ? $urli : null
                 ];
             } else {
                 $banner->name = $request->name[$i];
-                !empty( $request->url[$i] ) ? $banner->url = $request->url[$i] : '';
+                !empty( $urli ) ? $banner->url = $urli : '';
                 !empty( $request->banner[$i] ) ? $banner->file_path = $banner_file_path : '';
 
                 try{
