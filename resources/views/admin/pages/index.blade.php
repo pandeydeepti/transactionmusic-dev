@@ -31,7 +31,7 @@
                         <span class="loader-wrapper"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
                         <div class="toggle-checkbox">
                             <label class="switch">
-                                <input type="checkbox" name="active" id="faqs-active" @if( !empty( $faqs ) ) checked @endif>
+                                {{Form::checkbox('active', true, $faqs, ['id' => 'faqs-active'])}}
                                 <div class="slider round"></div>
                             </label>
                         </div>
@@ -55,10 +55,10 @@
                     <td class="checkbox-align-right">
                         {{--<span class="loader-wrapper"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>--}}
                         {{--<div class="toggle-checkbox">--}}
-                            {{--<label class="switch">--}}
-                                {{--{{Form::checkbox('active', true, $faqs, ['id' => 'faqs-active'])}}--}}
-                                {{--<div class="slider round"></div>--}}
-                            {{--</label>--}}
+                        {{--<label class="switch">--}}
+                        {{--{{Form::checkbox('active', true, $faqs, ['id' => 'faqs-active'])}}--}}
+                        {{--<div class="slider round"></div>--}}
+                        {{--</label>--}}
                         {{--</div>--}}
                     </td>
                     <td>
@@ -68,11 +68,15 @@
 
                     </td>
                 </tr>
+
                 @foreach($pages as $page)
                     <tr @if($page->active == 0) class="innactive-affected-row" @endif>
                         <td>
                             <div class="page-single-title">
+                                @if($page->slug != 'policies-terms')
                                 <a href="{{url('/admin/pages/edit/'.$page->id)}}">{{$page->title }}</a>
+                                @endif
+                                <a>{{$page->title }}</a>
                             </div>
                         </td>
                         <td>
@@ -88,7 +92,10 @@
                             </div>
                         </td>
                         <td>
+                             @if($page->slug != 'policies-terms')
                             <a href="/admin/pages/edit/{{$page->id}}" class="float-right">EDIT</a>
+                             @endif
+                            <a href="" class="float-right"></a>
                         </td>
                         <td>
                             <div class="page-single-delete">
