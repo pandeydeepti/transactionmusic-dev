@@ -33,6 +33,11 @@ class BannerController extends Controller
             $banner = Banner::where('name', $request->name[$i])->first();
             $banner_file_path = !empty( $request->banner[$i] ) ? $this->uploadPhoto($request->banner[$i], 'images/banners') : null;
 
+            $parsed = parse_url($request->url[$i]);
+            if (empty($parsed['scheme'])) {
+                $request->url[$i] = 'http://' . ltrim($request->url[$i], '/');
+            }
+            
             if( $banner == null )
             {
                 $banners[] = [
