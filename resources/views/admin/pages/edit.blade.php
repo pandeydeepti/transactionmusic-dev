@@ -2,7 +2,7 @@
 @section('content')
             {!! Form::open(['url' => 'admin/pages/update', 'id'=>'update_page']) !!}
     <div class="title-page col-md-12">
-        <div class="row">
+       
             {{$page->title}}
             <div class="toggle-checkbox">
                 <label class="switch">
@@ -12,7 +12,7 @@
                 </label>
             </div>
             <span class="loader-wrapper"><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
-        </div>
+       
     </div>
     <div class="col-md-8">
         <div class="row">
