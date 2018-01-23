@@ -595,7 +595,7 @@ ul.dropdown-menu{
 .beat-update-div .ajax-file-upload{
     font-size: 12px;
 }
-#beat-cover, #category-cover, #shop_beat_logo, .preview_div_style {
+#beat-cover, #category-cover, #producer-cover, #shop_beat_logo, #soundlike-cover, #shop_producer_logo, .preview_div_style{
     width: 180px;
     height: 145px;
     overflow: hidden;
