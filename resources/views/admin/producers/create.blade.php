@@ -2,10 +2,10 @@
 @section('content')
     {!! Form::open(['url' => 'admin/producers/create', 'id'=>'add_producer', 'files' => true]) !!}
     <div class="title-page col-md-12 top-padding-title">
-        <div class="row">
+        
             <div class="checkbox-title-togle">
                 Add Producer
-            </div>
+          
             <div class="toggle-checkbox">
                 <label class="switch">
                     {{Form::hidden('active',0)}}
