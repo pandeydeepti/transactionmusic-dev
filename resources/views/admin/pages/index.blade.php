@@ -75,7 +75,7 @@
                             <div class="page-single-title">
                                 @if($page->slug != 'policies-terms')
                                 <a href="{{url('/admin/pages/edit/'.$page->id)}}">{{$page->title }}</a>
-                                @endif
+                                @elseif($page->slug == 'policies-terms')
                                 <a>{{$page->title }}</a>
                             </div>
                         </td>
