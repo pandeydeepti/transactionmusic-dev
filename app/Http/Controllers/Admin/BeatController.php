@@ -30,7 +30,11 @@ class BeatController extends Controller
         'beats' => array(),
         'filters' => array()
     );
-
+	
+    public $global_new_object = array(
+            'beats' => array(),
+            'filters' => array()
+        );
 
     public function index()
     {
@@ -62,6 +66,7 @@ class BeatController extends Controller
         try{
             $beat->save();
             $this->generate_beat_JSON();
+			$this->generate_new_beat_JSON();
         } catch(Exception $ex){
             return response()->json([ 'message'  => $ex->getMessage(), 'type' => 'error']);
         }
@@ -183,6 +188,7 @@ class BeatController extends Controller
 
         if($beat->save()) {
             $this->generate_beat_JSON();
+			$this->generate_new_beat_JSON();
             ShopOption::where('meta_key', 'instance_storage')->update(['meta_value' => $this->get_directory_size(public_path('/beats'))]);
         } else {
             return redirect('/admin/beats/create/'.$beat->id.'')->with('data', [ 'message'  => 'Failed', 'type' => 'error']);
@@ -242,6 +248,7 @@ class BeatController extends Controller
         try {
             $beat->save();
             $this->generate_beat_JSON();
+			 $this->generate_new_beat_JSON();
             ShopOption::where('meta_key', 'instance_storage')->update(['meta_value' => $this->get_directory_size(public_path('/beats'))]);
         }
         catch (Exception $e) {
@@ -317,6 +324,7 @@ class BeatController extends Controller
             $beat->sound_likes()->detach($id);
             $beat->delete();
             $this->generate_beat_JSON();
+			$this->generate_new_beat_JSON();
             ShopOption::where('meta_key',
                 'instance_storage')->update(['meta_value' => $this->get_directory_size(public_path('/beats'))]);
         } catch (Exception $e) {
@@ -393,6 +401,54 @@ class BeatController extends Controller
         array_push($this->global_object['beats'], $beats);
 
     }
+	
+	public function organize_new_JSON($beats)
+    {
+        $beats->category_list = explode(',', $beats->category_list);
+        $beats->categories_cover = explode(',', $beats->categories_cover);
+        $beats->sounds_like = explode(',', $beats->sounds_like);
+        $beats->instruments = explode(',', $beats->instruments);
+        $beats->genre = explode(',', $beats->genre);
+        $beats->producer = explode(',', $beats->producer);
+        $beats->instance = array(
+            'name' => Config::get('app.name'),
+            'url' => url("/")
+        );
+        $beats->country_code = strtolower($this->global_country_code);
+        $beats->paypal_email = $this->global_paypal;
+        $beats->beat_files = array(
+            'mp3' => array(
+                'file_type' => 'mp3',
+                'file_path' => $beats->beat_mp3,
+                'file_price' => $beats->beat_mp3_price,
+            ),
+            'wav' => array(
+                'file_type' => 'wav',
+                'file_price' => $beats->beat_wav_price,
+            ),
+            'tracked_out' => array(
+                'file_type' => 'tracked out',
+                'file_price' => $beats->beat_tracked_out_price,
+            ),
+            'exclusive' => array(
+                'file_type' => 'exclusive',
+                'file_price' => $beats->beat_exclusive_price,
+            ),
+        );
+
+        /* Unset the data */
+        unset($beats->active);
+        unset($beats->beat_mp3);
+        unset($beats->beat_mp3_price);
+        unset($beats->beat_wav);
+        unset($beats->beat_wav_price);
+        unset($beats->beat_tracked_out);
+        unset($beats->beat_tracked_out_price);
+        unset($beats->beat_exclusive_price);
+        array_push($this->global_new_object['beats'], $beats);
+        
+    }
+	
     public function organize_cat_JSON($filter)
     {
         array_map(array($this, "organize_single_cat_JSON"), $filter);
@@ -547,6 +603,97 @@ class BeatController extends Controller
         ]);
 
         $client->request('get', 'subinstances/sync');
+    }
+	
+	public function generate_new_beat_JSON()
+    {
+        $this->global_country_code = ShopOption::where('meta_key', 'country')->first()['meta_value'];
+        $this->global_paypal = ShopOption::where('meta_key', 'paypal_email')->first()['meta_value'];
+        $new_beats = DB::select(DB::raw('
+           SELECT
+                AVG(rates.amount)  AS rate,
+                GROUP_CONCAT(categories.title) AS category_list,
+                GROUP_CONCAT(IFNULL(categories.cover, "0")) AS categories_cover,
+                 (
+
+                    SELECT beats.bpm
+
+                 ) AS bpm,
+
+                producers.title AS producer,
+                sound_likes.title AS sounds_like,
+                
+                (
+
+                    SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
+                    INNER JOIN categories on categories.id = beat_categories.category_id
+                    INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
+                    INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
+                    WHERE taxonomies.id = 2 AND beat_categories.beat_id = beats.id
+
+                 ) AS instruments,
+
+                 (
+
+                    SELECT GROUP_CONCAT(categories.title) FROM `beat_categories`
+                    INNER JOIN categories on categories.id = beat_categories.category_id
+                    INNER join category_taxonomies ON category_taxonomies.category_id = categories.id
+                    INNER JOIN taxonomies ON category_taxonomies.taxonomy_id = taxonomies.id
+                    WHERE taxonomies.id = 1 AND beat_categories.beat_id = beats.id
+
+                 ) AS genre,
+
+
+                 (beats.id) as beat_id,
+                 (beats.active),
+                 (beats.title) as beat_title,
+                 (beats.cover) as beat_cover,
+                 (beats.mp3) as beat_mp3,
+                 (beats.mp3_price) as beat_mp3_price,
+                 (beats.wav) as beat_wav,
+                 (beats.wav_price) as beat_wav_price,
+                 (beats.tracked_out) as beat_tracked_out,
+                 (beats.tracked_out_price) as beat_tracked_out_price,
+                 (beats.exclusive_price) as beat_exclusive_price,
+                 (beats.created_at) as beat_created_at
+
+                 FROM beats
+                 LEFT JOIN rates ON
+                    beats.id = rates.beat_id
+                 INNER JOIN beat_categories ON
+                    beats.id = beat_categories.beat_id
+                INNER JOIN beat_producers ON  
+                    beat_producers.beat_id = beats.id
+			    INNER JOIN producers ON  
+			        beat_producers.producer_id = producers.id
+			    INNER JOIN beat_sound_likes ON  
+			        beats.id = beat_sound_likes.beat_id
+			    INNER JOIN sound_likes ON  
+			        beat_sound_likes.sound_like_id = sound_likes.id
+                 INNER JOIN categories ON
+                    beat_categories.category_id = categories.id
+                 INNER JOIN category_taxonomies ON
+                    categories.id = category_taxonomies.category_id
+                 INNER JOIN taxonomies ON
+                    category_taxonomies.taxonomy_id = taxonomies.id
+                 WHERE(beats.active = 1)
+                 GROUP BY beats.id
+
+                 ORDER BY beats.created_at DESC LIMIT 6;
+
+         '));
+        if(!empty($new_beats)) {
+            array_map(array($this, "organize_new_JSON"), (array)$new_beats);
+
+           
+            file_put_contents(public_path() . '/json_resources/new_data.json', file_get_contents(public_path().'/json_resources/empty_beat_data.json'));
+            
+            file_put_contents(public_path() . '/json_resources/new_data.json', json_encode(array('beats' => $this->global_new_object['beats'], 'filters' => $this->global_new_object['filters'])));
+        } else {
+            file_put_contents(public_path() . '/json_resources/new_data.json', file_get_contents(public_path().'/json_resources/empty_beat_data.json'));
+        }
+
+
     }
 
     public function api_beats_json()

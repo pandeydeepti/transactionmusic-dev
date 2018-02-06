@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-    <body ng-app="myApp"  ng-controller="MainCtrl" >
+    <body ng-app="myApp" ng-controller="MainCtrl">
     <div class="beats-player-main-wrapper">
         <div class="container not-ready">
             <div class="row">
@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div ng-rate-it star-width="16" star-height="16" class="custom rate-single-preview"
-                             ng-model="songs[currentPlaying.index].rating"
+                             ng-model="songs[currentPlaying.index - 1].rating"
                              ng-click="setCurrentRatingIndex( currentPlaying.index, songs[currentPlaying.index].rating )"
                              min="0.1"
                              max="5"
@@ -25,8 +25,13 @@
                              resetable="false">
                         </div>
                     </div>
-                    <div class="col-md-6 instance-name-absolute">
+                    <div class="col-xs-6 instance-name-absolute">
                         <div class="instance-player-wrapper">
+                            <div class="instance-name-link-wrapper">
+                                <span class="instance-name-span">@{{ currentPlaying.instance.name  }}  </span>
+                                <span class="flag-icon flag-icon-@{{ currentPlaying.country_code }} flag-icon-squared"></span>
+                                <div class="instance-link-span"><a href="@{{ currentPlaying.instance.url }}" target="_blank">@{{ currentPlaying.instance.url }}</a></div>
+                            </div>
                             <div class="share-icons">
                                 <span ng-click="share_window( currentPlaying, 'facebook', '{{url('/')}}' );">
                                     <i class="fa fa-facebook"></i>
@@ -57,8 +62,8 @@
                         </div>
                         <div class="seconds-preview">  @{{ currentDuration }}</div>
                         <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4 col-xs-12"></div>
+                            <div class="col-sm-4 col-xs-12">
                                 <div class="player-function-wrapper">
                                     <button prev-track class="fa fa-fast-backward" aria-hidden="true"></button>
                                     <span class="play-pause-wrapper">
@@ -77,7 +82,7 @@
                                     <button next-track class="fa fa-fast-forward fa-6" aria-hidden="true"></button>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-4 col-xs-12">
                                 <div class="volume-controll-wrapper pull-right">
                                     <div class="seekLoadDone" ng-style="{width : ( volume_level + '%' ) }"></div>
                                     <input type="range" name="range" ng-model="volume_level"
@@ -93,6 +98,9 @@
     <div class="not-ready beats-main-wrapper clearfix" @if( !empty($main_color) ) style="background-color: {!! $main_color !!} @endif">
         <div class="beats-inner-wrapper clearfix">
             <div class="beat-sort-by-inner-wrapper clearfix">
+                <div class="player-search-wrapper pull-right position-relative">
+                    <input type="text" ng-model="textSearchFilter" name="search" placeholder="Search beats">
+                </div>
                 <div class="sortby-select-inner-wrapper clearfix">
                     <div class="select-wrapper pull-left">
                         <select
@@ -168,9 +176,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="player-search-wrapper pull-right position-relative">
-                    <input type="text" ng-model="textSearchFilter" name="search" placeholder="Search beats">
-                </div>
+
             </div>
             @{{trackLoaded}}
             <div class="beat-title-option-inner-wrapper clearfix">
@@ -209,7 +215,7 @@
                         </div>
                     </div>
                     <div ng-repeat="(filetype, file) in song.files"
-                         class="_@{{ $index + 3 }}-content pull-left _@{{ $index + 3 }}beats-padding-right">
+                         class="_@{{ $index + 3 }}-content pull-left _@{{ $index + 3 }}beats-padding-right beat-format-content-details-wrap">
                         <span class="mobile-title-appear"> @{{ filetype|bootify }}</span>
                         <label for="checkbox_@{{ filetype }}-@{{ song.id }}_toggle">
                             &#36; @{{ file.price }}
@@ -230,7 +236,7 @@
         </div>
     </div>
     <div class="container position-relative popup-div" id="popup-payment">
-        {{Form::open(['url' => 'payment', 'method' => 'post', 'id' => 'paypal-form'])}}
+        {{Form::open(['url' => 'payment', 'method' => 'post'])}}
         <div class="paypal-main-wrapper">
             <i class="fa fa-times featherlight-close-icon featherlight-close" aria-hidden="true"></i>
             <div class="paypal-inner-wrapper position-relative">
@@ -241,23 +247,22 @@
                     <div class="col-xs-3"><span class="float-right">PRICE&nbsp;</span></div>
                 </div>
                 <div class="paypal-content-wrapper clearfix" ng-repeat="item in cart">
-                    <input type="hidden" name="beat_id[]" value="@{{ item.beat_id }}">
+                    <input type="hidden" name="data[]" value='{ "beat_id": "@{{ item.beat_id }}", "paypal_email": "@{{ item.instance.email }}", "file_type": "@{{ get_file_types_bought( item ) }}" }'>
                     <div class="col-xs-3 no-padding"><span class="mobile-popup-title-visible">BEAT TITLE</span>@{{ item.title }}</div>
                     <div class="col-xs-3"><span class="mobile-popup-title-visible">PRODUCER</span>@{{ item.artist }}</div>
                     <div class="col-xs-4">
                         <span class="mobile-popup-title-visible">FORMAT</span>
-                        <input type="hidden" name="file_type[]" value="@{{ item.files | implodeFiletypes }}">
                         @{{ item.files | implodeFiletypes }}
                     </div>
                     <div class="col-xs-2"><span class="mobile-popup-title-visible price-content">PRICE</span><span class="float-right paypal-currency-span">&#36; @{{ item.files | calculate_bought_beats }}</span></div>
                 </div>
             </div>
             <div class="paypal-submit-wrapper">
-                <input type="submit" id="paypal_submit">
+                {{Form::submit()}}
             </div>
         </div>
         {{Form::close()}}
-
+    </div>
 
         <form action="https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay" target="PPDGFrame" class="standard" style="display: none">
 
@@ -268,55 +273,71 @@
         </form>
 
     </div>
-    @if(!empty($banners))
+		
+    @if(!$banners->isEmpty())
         <div class="banners-beat-main-wrapper clearfix">
             @foreach($banners as $banner)
                 <div class="col-md-6">
                     <a href="{{$banner->url}}" target="_blank"> <img src="{{$banner->file_path}}" alt="" width="100%"> </a>
                 </div>
-            @endforeach
+                @endforeach
         </div>
     @endif
-    <div class="newest-beats-main-wrapper">
-        @if(!empty($newest_beats))
-            <h2 class="newest-beats-padding-left">NEWEST BEATS</h2>
-            <div class="newest-beats-title-inner-wrapper newest-beats-padding-left clearfix">
-                <div class="newest-title pull-left">TITLE</div>
-                <div class="newest-producer pull-left">PRODUCER</div>
-                <div class="newest-genre pull-left">GENRE</div>
-                <div class="newest-bpm pull-left">BPM</div>
-                <div class="newest-added pull-left">ADDED</div>
+    <div class="container">
+       
+       
+        <div class="beats-inner-wrapper clearfix beatnewdiv">
+             <h2 class="titlediv-info"><strong><span style="font-size:26px;">Newest beats</span></strong></h2>
+           
+            <div class="beat-title-option-inner-wrapper clearfix">
+                <div class="pull-left single-content beat-main-title">TITLE</div>
+                <div class="pull-left second-content beat-main-title">PRODUCER</div>
+                <div class="pull-left second-content beat-main-title">GENRE</div>
+                <div class="pull-left second-content beat-main-title">BPM</div>
+                <div class="pull-left second-content beat-main-title">ADDED</div>
             </div>
-            @foreach($newest_beats as $newest_beat)
-                <div class="newest-beats-single-inner-wrapper newest-beats-padding-left clearfix">
-                    <div class="newest-title pull-left"><span class="newest-mobile-devices-wisible main-color">TITLE</span> {{$newest_beat->beat_title}}</div>
-                    <div class="newest-producer pull-left"><span class="newest-mobile-devices-wisible main-color">PRODUCER</span>{{$newest_beat->producer}}</div>
-                    <div class="newest-genre pull-left"><span class="newest-mobile-devices-wisible main-color">GENRE</span>{{$newest_beat->genre }}</div>
-                    <div class="newest-bpm pull-left"><span class="newest-mobile-devices-wisible main-color">BPM</span>{{$newest_beat->beat_bpm}}</div>
-                    <div class="newest-added pull-left"><span class="newest-mobile-devices-wisible main-color">ADDED</span>{{$newest_beat->beat_created_at}} ago</div>
+            <div class="clearfix">
+                <div class="beat-single-content-inner-wrapper"
+                     ng-class="{beat_row_hover: currentPlaying.id == song.id}"
+                     ng-repeat="song in newsongs">
+                    <div music-player="play" add-song="song" ng-click="togglePauseShow();"
+                         class="beat-title single-content pull-left ">
+                        <span class="mobile-title-appear">BEAT TITLE</span>
+                        @{{ song.title }}
+                    </div>
+                    <div class="producer-title second-content pull-left"><span class="mobile-title-appear">PRODUCER</span> @{{ song.artist }}</div>
+                    <div class="producer-title second-content pull-left"><span class="mobile-title-appear">GENRE</span> @{{ song.genre }}</div>
+                    <div class="producer-title second-content pull-left"><span class="mobile-title-appear">BPM</span> @{{ song.bpm }}</div>
+                    
+                    <div class="producer-title second-content pull-left"><span class="mobile-title-appear">ADDED</span> <time-ago from-time='@{{ song.added }}' format='MM/dd/yyyy'>@{{ song.added }}</time-ago></div>
+
                 </div>
-            @endforeach
-        @endif
+            </div>
+        </div>
     </div>
 
     <div class="beats-producers-main-wrapper clearfix">
-        @if(!empty($producers))
-            @foreach($producers as $producer)
+    @if(!empty($producer_pages))
+        <div class="beats-producers-main-wrapper clearfix">
+            @foreach($producer_pages as $producer_page)
                 <div class="col-md-6">
                     <div class="beats-producers-inner-wrapper">
                         <div>
-                            <img src="{{$producer->file_path}}" alt="{{$producer->title}}">
+                            @if( $producer_page->file_path )
+                                <img src="{{$producer_page->file_path}}" alt="{{$producer_page->title}}">
+                            @endif
                         </div>
                         <div class="beats-producer-title-wrapper">
-                            {{$producer->title}}
+                            {{$producer_page->title}}
                         </div>
                         <div>
-                            {{$producer->description}}
+                            <?php echo htmlspecialchars_decode($producer_page->description); ?>
                         </div>
                     </div>
                 </div>
             @endforeach
-        @endif
+        </div>
+    @endif
     </div>
     </body>
 @endsection
