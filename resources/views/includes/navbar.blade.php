@@ -15,6 +15,7 @@
             @if((strpos($faqs, '1') !== false))
                 <li><a href="{{url('/faq')}}">FAQ</a></li>
             @endif
+            <li><a href="{{url('/contact')}}">CONTACT US</a></li>
         </ul>
     </div>
 </div>
