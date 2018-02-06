@@ -72,7 +72,7 @@ class BeatController extends Controller
              JavaScript::put([ 'newdata' =>  json_decode( $newjson ) ]);
             
         } else {
-            JavaScript::put(['newdata' =>  json_decode( file_get_contents(public_path() .'/empty-data.json')) ]);
+            JavaScript::put(['newdata' =>  json_decode( file_get_contents(public_path() .'/json_resources/empty-data.json')) ]);
         }
 
         return view('beats.index', compact('banners', 'shop_text', 'application_text', 'producer_pages'));
