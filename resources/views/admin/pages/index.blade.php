@@ -21,7 +21,7 @@
                 <tr @if($faqs == 0) class="innactive-affected-row" @endif id="opacity-wrapper">
                     <td>
                         <div class="page-single-title">
-                            <a href="{{url('/admin/pages/edit/faq')}}"> FAQ </a>
+                            <a> FAQ </a>
                         </div>
                     </td>
                     <td>
@@ -37,7 +37,6 @@
                         </div>
                     </td>
                     <td>
-                        <a href="/admin/pages/edit/faq" class="float-right">EDIT</a>
                     </td>
                     <td>
 
