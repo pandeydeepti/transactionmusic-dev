@@ -125,6 +125,7 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
     var ajaxInProgress = false;
 
     $scope.songs = [];
+    $scope.newsongs = [];
     $scope.cart = [];
     $scope.filters = lf.data.filters;
     $scope.soundManager = angularPlayer.getSoundMaster();
@@ -224,7 +225,7 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
             angularPlayer.addTrack($scope.songs[i]);
         }
 
-        var song_title = getParameterByName('title');
+         var song_title = getParameterByName('title');
 
         if( song_title != null ){
 
@@ -274,7 +275,9 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
             sound.setPosition((seekTime / 100) * sound.durationEstimate);
         });
     }
+
     for (var i = 0; i < Object.keys(lf.data.beats).length; i++) {
+
         $scope.songs.push({
             index: i + 1,
             id: i + 1,
@@ -289,6 +292,12 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
             categories: {
                 names: lf.data.beats[i].category_list,
                 covers: lf.data.beats[i].category_cover
+            },
+            sounds_like: {
+                names: lf.data.beats[i].sounds_like,
+            },
+            producer: {
+                names: lf.data.beats[i].producer,
             },
             artist: lf.data.beats[i].producer.join(', '),
             instance: {
@@ -318,7 +327,7 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
     }
     angular.forEach($scope.filters, function( element, taxtitle ){
 
-        //TODO: Beat controller change JSON return type
+         //TODO: Beat controller change JSON return type
         var tax_object = {
             id      : 0,
             title   : taxtitle.toUpperCase(),
@@ -328,6 +337,59 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
             element.categories.unshift( tax_object );
 
     });
+    
+    
+    for (var i = 0; i < Object.keys(lf.newdata.beats).length; i++) {
+
+        $scope.newsongs.push({
+            index: i + 1,
+            id: i + 1,
+            slug: $scope.convertTitleToSlug(lf.newdata.beats[i].beat_title),
+            beat_id: lf.newdata.beats[i].beat_id,
+            title: lf.newdata.beats[i].beat_title,
+            bpm: lf.newdata.beats[i].bpm,
+            genre: lf.newdata.beats[i].genre.join(', '),
+            added:lf.newdata.beats[i].beat_created_at,
+            cover: lf.newdata.beats[i].beat_cover,
+            rating: ratingService.parseRateAmountBack(lf.newdata.beats[i].rate),
+            url: lf.newdata.beats[i].beat_files.mp3.file_path,
+            country_code: lf.newdata.beats[i].country_code,
+            categories: {
+                names: lf.newdata.beats[i].category_list,
+                covers: lf.newdata.beats[i].category_cover
+            },
+            sounds_like: {
+                names: lf.newdata.beats[i].sounds_like,
+            },
+            producer: {
+                names: lf.newdata.beats[i].producer,
+            },
+            artist: lf.newdata.beats[i].producer.join(', '),
+            instance: {
+                name: lf.newdata.beats[i].instance.name,
+                url: lf.newdata.beats[i].instance.url,
+                email: lf.newdata.beats[i].paypal_email,
+            },
+            files: {
+                mp3: {
+                    price: lf.newdata.beats[i].beat_files.mp3.file_price,
+                    bought: false
+                },
+                wav: {
+                    price: lf.newdata.beats[i].beat_files.wav.file_price,
+                    bought: false
+                },
+                tracked_out: {
+                    price: lf.newdata.beats[i].beat_files.tracked_out.file_price,
+                    bought: false
+                },
+                exclusive: {
+                    price: lf.newdata.beats[i].beat_files.exclusive.file_price,
+                    bought: false
+                },
+            }
+        });
+    }
 
     /* Update cart data */
     $scope.updateCartPrice = function( fileType, song ){
@@ -365,12 +427,12 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
     $scope.copyToClipboard = function(element) {
         var $temp = $("<input>");
         $temp.hide(0);
+        console.log($temp);
         $("body").append($temp);
         $temp.val($(element).val()).select();
 
         document.execCommand("copy");
         $temp.remove();
-        alertify['success']('Link copied to clipboard.');
     }
 
     $scope.share_window = function( currentPlaying, type, shop_url ){
@@ -393,7 +455,9 @@ player.controller('MainCtrl', function ($scope, angularPlayer, cartService, rati
         } else if( type == 'twitter' ){
             href = "http://twitter.com/share?text="+ currentPlaying.title +"&url=" + shop_url + "?title="+ currentPlaying.slug +"&hashtags="+ currentPlaying.artist;
         }
+
         window.open(href, 'Post to '+ type.toUpperCase() +': ' + currentPlaying.slug, 'toolbar=0,status=0,width=' + w + ',height=' + h + ', top=' + top + ', left=' + left);
+
     }
 
     $scope.get_file_types_bought = function( item ){
@@ -431,7 +495,7 @@ player.filter('customFilter', function () {
 
         angular.forEach(items, function(value1, key1) {
 
-            if (value1.categories.names.containsArray(filter_array)) {
+            if (value1.categories.names.containsArray(filter_array) || value1.sounds_like.names.containsArray(filter_array) || value1.producer.names.containsArray(filter_array)) {
                 if( return_items.indexOf(value1) == -1 ){
                     return_items.push(value1);
                 }
