@@ -1,0 +1,25 @@
+{
+  "beats": [],
+  "filters": {
+    "genre": {
+      "categories": [
+      ],
+      "cover": "https:\/\/dev.transactionmusic.com\/images\/taxonomies\/Genre.jpg"
+    },
+    "instruments": {
+      "categories": [
+      ],
+      "cover": "https:\/\/dev.transactionmusic.com\/images\/taxonomies\/Instruments.jpg"
+    },
+    "producer": {
+      "categories": [
+      ],
+      "cover": "https:\/\/dev.transactionmusic.com\/images\/taxonomies\/Producer.jpg"
+    },
+    "sounds like": {
+      "categories": [
+      ],
+      "cover": "https:\/\/dev.transactionmusic.com\/images\/taxonomies\/Sounds_Like.jpg"
+    }
+  }
+}
