@@ -316,7 +316,7 @@
         </div>
     </div>
 
-    <div class="beats-producers-main-wrapper clearfix">
+    <div class="">
     @if(!empty($producer_pages))
         <div class="beats-producers-main-wrapper clearfix">
             @foreach($producer_pages as $producer_page)
