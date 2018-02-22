@@ -181,14 +181,13 @@
         color:    #ffffff;
     }
     
- @media all and (-ms-high-contrast:none)
+  @media all and (-ms-high-contrast:none)
      {
 .seekLoadDone{top:17px !important;}
 *::-ms-backdrop, .seekLoadDone{top:17px !important;}
 
-*{
-box-sizing:content-box;}
-*::-ms-backdrop, *{
+
+*::-ms-backdrop, .seekLoad{
 box-sizing:content-box;}
 
 .seekBase input[type=range], .volume-controll-wrapper input[type=range]{background:none;}
@@ -201,9 +200,9 @@ box-sizing:content-box;}
 top:0px;}
 *::-ms-backdrop, .seekLoadVolume{position:absolute;
 top:0px;}
-.beats-player-main-wrapper .volume-controll-wrapper{right:85px; top:20px;}
+.beats-player-main-wrapper .volume-controll-wrapper{ top:20px;}
 
-*::-ms-backdrop, .beats-player-main-wrapper .volume-controll-wrapper{right:85px; top:20px;}
+*::-ms-backdrop, .beats-player-main-wrapper .volume-controll-wrapper{ top:20px;}
 .beats-player-main-wrapper .volume-controll-wrapper.pull-right {
   background: rgba(0, 0, 0, 0) url("../images/volume-icon.png") no-repeat scroll left 10px;
   padding-bottom: 12px;
@@ -217,3 +216,4 @@ top:0px;}
 }
 
      }
+     
