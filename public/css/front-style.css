@@ -2167,3 +2167,48 @@ li {
 .player-function-wrapper .fa-fast-forward {
   padding-top: 6px;
 }
+@media screen and (max-width: 767px) and (min-device-width: 0px) {
+.second-content {
+  max-width: 100%;
+}
+
+.single-content {
+  max-width: 100%;
+}
+
+.home-image-absolute.home-image-position-mobile {
+  padding-top: 60px;
+}
+.select-wrapper {
+  width: 100%;
+}
+.contact-main-wrapper label {
+  font-size: 17px;
+}
+.sortby-select-inner-wrapper.clearfix .select-wrapper.pull-left:nth-child(2) {
+  width: 100%;
+}
+.preview-progres-bar {
+  padding: 0 0 0 30px;
+  width: 75%;
+}
+
+.volume-controll-wrapper.pull-right{overflow:hidden;}
+
+.player-function-wrapper {
+  float: left;
+  max-width: 100%;
+  padding: 30px 0 20px;
+}
+
+.setting-player-bar {
+  padding: 20px 0 0;
+}
+.fa.fa-bars.fa-caret-right::before {
+  content: "" !important;
+}
+.page-inner-wrapper.text-right button {
+  position: relative;
+  z-index: 10000;
+}
+}
