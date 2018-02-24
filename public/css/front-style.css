@@ -2167,6 +2167,31 @@ li {
 .player-function-wrapper .fa-fast-forward {
   padding-top: 6px;
 }
+.title-page.pagetitle-producers {
+  font-size: 30px;
+  padding:48px 0 12px;
+}
+.cover-photo {
+  float: left;
+  margin-right: 4%;
+}
+.producers_info {
+  background: rgb(241, 241, 241) none repeat scroll 0 0;
+  float: left;
+  margin: 20px 0;
+  padding: 25px;
+  width: 100%;
+}
+.producers_info .page-single-inner-wrapper {
+  padding: 5px 0;
+}
+.cover-photo > img {
+  background: rgb(255, 255, 255) none repeat scroll 0 0;
+  padding: 3px;
+}
+.volume-controll-wrapper.pull-right {
+  overflow: hidden;
+}
 @media screen and (max-width: 767px) and (min-device-width: 0px) {
 .second-content {
   max-width: 100%;
@@ -2211,4 +2236,79 @@ li {
   position: relative;
   z-index: 10000;
 }
+.inner-page-container.inner-page-container-new {
+  max-width: 90%;
+}
+
+.contact-main-wrapper input {
+  font-size: 10px;
+  text-indent: 2px;
+}
+
+
+.contact-main-wrapper input[type="submit"] {
+  margin: 0;
+}
+.contact-main-wrapper .check-availability-wrapper {
+  padding: 0;
+}
+#instanceloader > img {
+  width: 100%;
+}
+
+.loder-div {
+  padding-top:30%;
+}
+.cover-photo {
+  float: none;
+  margin-right: 0;
+}
+
+.producers_info {
+  text-align: center;
+}
+
+.producers_info .title-page {
+  padding: 10px 0;
+}
+
+.title-page.pagetitle-producers {
+  padding: 48px 0 4px;
+  text-align: center;
+}
+.tm-suffix {
+  font-size: 12px;
+  padding: 18px 0;
+}
+#btn-order-instance {
+  font-size: 9px;
+}
+.player-function-wrapper {
+  float: none;
+  text-align: center;
+}
+
+.player-function-wrapper button {
+  display: inline-block;
+  float: none !important;
+}
+.player-function-wrapper .fa-pause, .player-function-wrapper .fa-play {
+  display: inline-block;
+margin:0px !important;
+}
+
+.player-function-wrapper .fa-fast-forward {
+  display: inline-block;
+  float: none !important;
+}
+.beats-player-main-wrapper .volume-controll-wrapper.pull-right {
+  background-position:left 16px;
+}
+}
+
+@media screen and (max-width: 767px) and (min-device-width:531px) {
+    .beats-player-main-wrapper .volume-controll-wrapper.pull-right {
+  background-position: left 28px;
+}
+    
 }
